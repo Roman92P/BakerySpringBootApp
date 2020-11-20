@@ -31,6 +31,8 @@
                                 <th>Price</th>
                                 <th>Recipe name</th>
                                 <th>Ingredients</th>
+                                <th>Add product img</th>
+                                <th>Image</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -56,9 +58,38 @@
                                         </div>
                                     </div>
                                 </td>
+                                <td>
+                                    <div th:if="${photo}==  null">
+                                        <a th:href="@{/product/addImg/{id}(id=${product.id})}" role="button"
+                                           class="btn btn-primary">Upload img</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div th:if="${photo}">
+                                        <div class="card-img">
+                                            <div class="card-body">
+                                                <a class="btn-dark shadow-sm btn" role="button"
+                                                   th:href="@{/product/deleteImg/{id}(id=${product.id})}">Delete</a>
+                                                <a class="btn-primary shadow-sm btn" role="button"
+                                                   th:href="@{/product/editImg/{id}(id=${product.id})}">Edit</a>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             </tbody>
+                            <tfoot>
+                            </tfoot>
                         </table>
+                        <div th:if="${photo}">
+                            <div class="card-body text-center mt-5 mb-5 shadow-sm">
+                                <div class="col-3">
+                                    <img height="150" width="150" alt="produkt"
+                                         th:src="*{'data:image/png;base64,'+photo}"/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -94,7 +125,7 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-<!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                <!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
                 <form th:action="@{/logout}" method="post">
                     <input class="fa fa-id-badge" type="submit" value="Wyloguj">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

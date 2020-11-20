@@ -22,30 +22,38 @@
             <div th:insert="fragments/topbar::#topbar"></div>
             <!--        Content-->
             <div class="container-fluid">
-                <div th:each="product : ${bakeryProducts}" style="display: inline-block">
-                    <div class="row">
-                        <div class="card m-3">
-                            <h5 class="card-header">Product:<span th:text=" ${product.name}"
-                                                                  class="ml-1"></span>.Cena:<span
-                                    th:text=" ${product.price}" class="ml-1 mr-1"></span></h5>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h5 class="card-title">Ingredients: </h5>
-                                        <div th:each="ingredient:${product.recipe.recipeItemList}">
-                                            <p class="card-text"><span th:text="${ingredient.ingredients.name}"></span>
-                                            </p>
-                                            <br>
+                <div class="row">
+                    <div class="card m-3">
+                        <h5 class="card-header">Product:<span th:text=" ${productForPhoto.name}"
+                                                              class="ml-1"></span></h5>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div>
+                                        <form method="POST" enctype="multipart/form-data" th:action="@{/product/upload/{id}(id=${productForPhoto.id})}">
+                                            <table>
+                                                <tr>
+                                                    <td>File to upload:</td>
+                                                    <td><input type="file" name="file"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><input type="submit" value="Upload"/></td>
+                                                </tr>
+                                            </table>
+                                        </form>
+                                        <div th:if="${message}">
+                                            <h2 th:text="${message}"></h2>
                                         </div>
                                     </div>
-<!--                                    <div class="col-6">-->
-<!--                                        <div th:each="${images}">-->
-<!--                                            <div th:text="${images.entry()}"></div>-->
-<!--                                        </div>-->
-<!--                                                <img height="600" width="600" alt="productImg"-->
-<!--                                                     th:src="*{'data:image/png;base64,'+img}"/>-->
-<!--                                        </div>-->
-                                    </div>
+
+<!--                                    <div>-->
+<!--                                        <ul>-->
+<!--                                            <li th:each="file : ${files}">-->
+<!--                                                <a th:href="${file}" th:text="${file}"/>-->
+<!--                                            </li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -57,7 +65,7 @@
             <div th:insert="fragments/footer::#footer"></div>
         </div>
     </div>
-
+</div>
 <!-- End of Page Wrapper -->
 
 <!-- Scroll to Top Button-->

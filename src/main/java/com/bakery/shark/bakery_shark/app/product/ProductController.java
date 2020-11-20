@@ -10,15 +10,17 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import javax.validation.Validator;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,9 +38,40 @@ public class ProductController {
     private final JpaIngredientService ingredientService;
     private final JpaRecipeService recipeService;
 
+    @GetMapping("/addImg/{id}")
+    public String uploadImgToProduct(@PathVariable Long id, Model model){
+        Product product = jpaProductService.getProduct(id).orElseThrow(EntityNotFoundException::new);
+        model.addAttribute("productForPhoto", product);
+
+        return "addProductImg";
+    }
+
+    @PostMapping("/upload/{id}")
+    public String postUpload(@RequestParam("file") MultipartFile file, @PathVariable long id, RedirectAttributes redirectAttributes) {
+
+        if (file.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
+            return "addProductImg";
+        }
+
+        Optional<Product> product = jpaProductService.getProduct(id);
+        if(product.isPresent()){
+            Product product1 = product.get();
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        try {
+            product1.setPhoto(file.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        jpaProductService.updateProduct(product1);
+    }
+        return "redirect:/product/details/"+product.get().getId();
+    }
+
     @RequestMapping("/add")
     public String addProductForm(Model model) {
-        model.addAttribute("product", new Product());
+        Product product = new Product();
+        model.addAttribute("product", product);
         return "addProductView";
     }
 
@@ -89,6 +122,22 @@ public class ProductController {
     public String productDeatils(@PathVariable long id, Model model){
         Product product = jpaProductService.getProduct(id).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("product", product);
+
+        byte[] img = product.getPhoto();
+        String image = "";
+        if (img != null && img.length > 0) {
+            image = Base64.getEncoder().encodeToString(img);
+            model.addAttribute("photo", image);
+        }
+
         return "productDetailsView";
+    }
+
+    @RequestMapping("/deleteImg/{id}")
+    public String deleteProductImg(@PathVariable Long id, Model model){
+        Product product = jpaProductService.getProduct(id).orElseThrow(EntityNotFoundException::new);
+        product.setPhoto(null);
+        jpaProductService.updateProduct(product);
+        return "redirect:/product/details/"+id;
     }
 }

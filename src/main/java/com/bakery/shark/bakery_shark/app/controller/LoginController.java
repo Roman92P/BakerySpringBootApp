@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -74,6 +74,19 @@ public class LoginController {
     public String getOffer(Model model) {
         List<Product> allProducts = productService.getAllProducts();
         model.addAttribute("bakeryProducts", allProducts);
+
+        Map<Long, String> allPictures = new HashMap<>();
+        for ( Product p : allProducts ) {
+            byte[] img = p.getPhoto();
+            String image = "";
+            if (img != null && img.length > 0) {
+                image = Base64.getEncoder().encodeToString(img);
+            }
+            allPictures.put(p.getId(), image);
+        }
+
+        model.addAttribute("images", allPictures);
+
         return "offerView";
     }
 

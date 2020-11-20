@@ -8,6 +8,8 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleContextResolver;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.Arrays;
 import java.util.Locale;
 
 @Configuration
@@ -24,6 +27,18 @@ import java.util.Locale;
 @EnableJpaRepositories(basePackages = "com.bakery.shark.bakery_shark")
 public class AppConfig implements WebMvcConfigurer {
 
+
+//    @Bean
+//    public HttpFirewall looseHttpFirewall() {
+//        StrictHttpFirewall firewall = new StrictHttpFirewall();
+//        firewall.setAllowedHttpMethods(Arrays.asList("GET", "POST"));
+//        firewall.setAllowSemicolon(true);
+//        firewall.setAllowUrlEncodedSlash(true);
+//        firewall.setAllowBackSlash(true);
+//        firewall.setAllowUrlEncodedPercent(true);
+//        firewall.setAllowUrlEncodedPeriod(true);
+//        return firewall;
+//    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -43,12 +58,6 @@ public class AppConfig implements WebMvcConfigurer {
         public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/resources/**")
-//                .addResourceLocations("/public", "classpath:/static/")
-//                .setCachePeriod(31556926);
-//    }
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
