@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page Bakery Manager</title>
+    <!--    font awesome-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/vendor/fontawesome-free/css/all.css"
+          rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.css" rel="stylesheet">
+</head>
+<body id="page-top">
+
+<div id="wrapper">
+    <!--    th sidebar-->
+    <div th:replace="fragments/sidebar::sidebar"></div>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--       th topbar-->
+            <div th:insert="fragments/topbar::#topbar"></div>
+            <!--        Content-->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12">
+                        <label class="h2">Add ingredient and quantities to Recipe with id: <span id="recipeIdVal" th:text="${recipeId}"></span></label>
+                        <form method="post" action="#" th:object="${recipeItem}" th:action="@{/recipeItem/add}">
+                            <label th:for="${recipeItem.recipe}">
+                                <input hidden th:field="*{recipe.id}"/>
+                            </label>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-xs-12">
+                                    <label th:for="${recipeItem.ingredients}">Add ingredient to recipe item
+                                        <select th:field="*{ingredients}">
+                                            <option th:each="i : ${ingredients}" th:value="${i.id}" th:label="${i.name}">
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-xs-12">
+                                    <label th:for="${recipeItem.ingredientQuantity}">Set quantity
+                                        <input th:value="*{ingredientQuantity}" type="number" th:step="0.01" th:field="*{ingredientQuantity}"/>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <input type="submit" class="btn btn-primary shadow-lg" th:value="Add">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class = "col">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Ingredient quantity</th>
+                                    <th>Ingredient name</th>
+                                    <th>Recipe name</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="recipeItem : ${recipeItemsByRecipeId}">
+                                    <td th:text="${recipeItem.id}"></td>
+                                    <td th:text="${recipeItem.ingredientQuantity}"></td>
+                                    <td th:text="${recipeItem.ingredients.name}"></td>
+                                    <td th:text="${recipeItem.recipe.name}"></td>
+                                    <td>
+                                        <p><a th:href="@{/recipeItem/edit/{id}(id=${recipeItem.id})}">Edit</a></p>
+                                        <p><a th:href="@{/recipeItem/delete/{id1}/{id2}(id1=${recipeItem.ingredients.id}, id2=${recipeItem.recipe.id})}">Delete</a></p>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <a href="/main" role="button" class="btn btn-primary shadow-lg">Back to main</a>
+                        </div>
+                    </div>
+            </div>
+            <!--        End of content-->
+            <!--        th footer-->
+            <div th:insert="fragments/footer::#footer"></div>
+        </div>
+    </div>
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+<!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                <form th:action="@{/logout}" method="post">
+                    <input class="fa fa-id-badge" type="submit" value="Wyloguj">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js"></script>
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/js/sb-admin-2.min.js"></script>
+</div>
+</body>
+</html>

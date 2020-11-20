@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page Bakery Manager</title>
+    <!--    font awesome-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/vendor/fontawesome-free/css/all.css"
+          rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.css" rel="stylesheet">
+</head>
+<body id="page-top">
+
+<div id="wrapper">
+
+    <!--    th sidebar-->
+    <!--    <div th:replace="fragments/sidebar::sidebar"></div>-->
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--       th topbar-->
+            <div th:insert="fragments/topbar::#topbar"></div>
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-auto">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle btn-lg" type="button"
+                                    id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Navigator
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" th:href="@{/cashRegister}">To cash register</a>
+                                <a class="dropdown-item" th:href="@{/main}">To main page (for authorized)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--        Content-->
+            <div class="container-fluid h-50">
+                <span th:if="${alertIngredients!=null}">
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                     <h6 class="m-0 font-weight-bold text-primary">You can't produce <span
+                                         th:text="${alertProductName}"></span>
+                                         in quantity of <span th:text="${alertQuantity}"></span>. Bellow ingredients witch warehouse quantity is not enought.</h6>
+                                </div>
+                                    <table class="table-hover table">
+                                    <thead>
+                                    <tr>
+                                        <th>Name of ingredient</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="ingredientError : ${alertIngredients}">
+                                        <td th:text="${ingredientError}"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td>
+                                            <a role="button" class="btn-primary btn-primary shadow-sm" th:href="@{/main}">Send info to admin</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a role="button" class="btn-primary btn-primary shadow-sm" th:href="@{/kitchen}">Cancel</a>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                        </div>
+                    </div>
+                    </div>
+                </span>
+                <div class="row">
+                    <div class="col-8">
+                        <div th:each="product : ${products}" style="display: inline-block">
+                            <div class="col flex-column">
+                                <div class="card" style="width: 11rem;">
+                                    <div class="card-body">
+                                        <a th:href="@{/kitchen/createManufactured/{id}(id=${product.id})}">
+                                            <button class="btn-primary">
+                                                <i class="fas fa-bread-slice"></i>
+                                                <h5 class="card-title"><p th:text="${product.name}"></p>
+                                                </h5>
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <table class="table flex-column">
+                            <thead>
+                            <tr>
+                                <th>Product name</th>
+                                <th>Product quantity</th>
+                                <th>Action</th>
+                            </tr>
+                            <thead>
+                            <tbody>
+                            <tr th:each="item: ${allManufacturedItems}" th:id="workOrderItem">
+                                <td th:text="${item.product.name}"></td>
+                                <td th:text="${item.quantity}"></td>
+                                <td>
+                                    <a th:href="@{#}">Edit</a>
+                                    <br>
+                                    <a th:href="@{#}">Remove</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot th:id="endOrder">
+                            <tr>
+                                <td>
+                                    <a th:href="@{/kitchen/finalizeOrder}" class="btn-lg btn-primary"
+                                       style="text-decoration: none">Book work order</a>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--        End of content-->
+            <!--        th footer-->
+
+        </div>
+    </div>
+</div>
+<div th:insert="fragments/footer::#footer"></div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:insert="fragments/logoutModal::#logout"></div>
+<!--<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"-->
+<!--     aria-hidden="true">-->
+<!--    <div class="modal-dialog" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>-->
+<!--                <button class="close" type="button" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">×</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>-->
+<!--&lt;!&ndash;                <a class="btn btn-primary" th:href="@{/login}">Logout</a>&ndash;&gt;-->
+<!--                <form th:action="@{/logout}" method="post">-->
+<!--                    <input class="fa fa-id-badge" type="submit" value="Wyloguj">-->
+<!--                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!-- Bootstrap core JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js"></script>
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/js/sb-admin-2.min.js"></script>
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/js/kitchen.js"></script>
+</body>
+</html>

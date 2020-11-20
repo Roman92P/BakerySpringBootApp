@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page Bakery Manager</title>
+    <!--    font awesome-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/vendor/fontawesome-free/css/all.css"
+          rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.css" rel="stylesheet">
+</head>
+<body id="page-top">
+
+<div id="wrapper">
+    <!--    th sidebar-->
+    <div th:replace="fragments/sidebar::sidebar"></div>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--       th topbar-->
+            <div th:insert="fragments/topbar::#topbar"></div>
+            <!--        Content-->
+            <div class="container-fluid shadow-sm">
+                <div class="row">
+                    <div class="col-12">
+                        <form action="#" method="post" th:action="@{/recipeItem/edit/}" th:object="${recipeItem}">
+                            <div class="row">
+                                <label th:for="*{id}">
+                                    <input hidden th:field="*{id}" th:value="${recipeItem.id}"/>
+                                </label>
+                                <label th:for="*{recipe}">
+                                    <input hidden th:field="*{recipe.id}" th:value="${recipeItem.recipe.id}"/>
+                                </label>
+                                <label th:for="*{ingredientQuantity}">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Quantity
+                                        of
+                                        ingredient
+                                    </div>
+                                    <input type="number" th:step="0.01" th:field="*{ingredientQuantity}"
+                                           th:value="${recipeItem.ingredientQuantity}" th:class="${#fields.hasErrors('ingredientQuantity')}? fieldError"/>
+                                    <p class="text-danger" th:if="${#fields.hasErrors('ingredientQuantity')}" th:errors="*{ingredientQuantity}">Incorrect date</p>
+                                </label>
+                            </div>
+                            <div class="row">
+                                <label th:for="*{ingredients}">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1"> Ingredient
+                                    </div>
+                                    <input hidden th:field="*{ingredients.id}" th:value="${recipeItem.ingredients.id}">
+                                    <p th:text="${recipeItem.ingredients.name}"></p>
+                                </label>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <input type="submit" class="btn btn-primary shadow-lg" th:value="Edit">
+                                    <a th:href="@{/recipeItem/add/{id}(id=${recipeItem.recipe.id})}" role="button" class="btn btn-primary shadow-lg">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--        End of content-->
+            <!--        th footer-->
+            <div th:insert="fragments/footer::#footer"></div>
+        </div>
+    </div>
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+<!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                <form th:action="@{/logout}" method="post">
+                    <input class="fa fa-id-badge" type="submit" value="Wyloguj">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js"></script>
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/js/sb-admin-2.min.js"></script>
+</body>
+</html>

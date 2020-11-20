@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page Bakery Manager</title>
+    <!--    font awesome-->
+    <link th:href="@{/all.css}" rel="stylesheet"/>
+    <!-- Custom styles for this template-->
+    <link th:href="@{/css/sb-admin-2.min.css}"  >
+</head>
+<body id="page-top">
+
+<div id="wrapper">
+    <!--    th sidebar-->
+
+    <div th:replace="fragments/sidebar::sidebar"></div>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--       th topbar-->
+            <!--            <div th:insert="fragments/topbar::#topbar"></div>-->
+            <!--        Content-->
+            <div class="container-fluid h-75">
+                <div class="card-deck text-sm-center">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">WELCOME!</h5>
+                            <p class="card-text">This is Bakery Manager App.</p>
+                            <p class="card-text"><small class="text-muted">To enter please click button bellow</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+<!--                <div th:if="${#authorization?.expression('isAuthenticated()')=='ROLE_USER'}">-->
+                <div sec:authorize="isAuthenticated()">
+                    <div class="mt-5">
+                        <div class="row text-sm-center">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <a th:href="@{/main}" class="btn-dark btn-lg shadow-sm" role="button">Enter
+                                            Bakery Manager</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <div class="row text-sm-center">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <a th:href="@{/kitchen}" class="btn-dark btn-lg shadow-sm" role="button">Enter
+                                            Kitchen/Cash Register</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <div class="row text-sm-center">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <a th:href="@{/offer}" class="btn-dark btn-lg shadow-sm" role="button">Our offer</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <div class="row text-sm-center">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <form th:action="@{/logout}" method="post">
+                                            <input class="btn btn-dark shadow-sm" type="submit" value="Wyloguj">
+                                            <input type="hidden"  name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${#authorization?.expression('isAnonymous()')}">
+                    <div class="mt-5">
+                        <div class="row text-sm-center">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <a th:href="@{/user/create-user}" class="btn-dark btn-lg shadow-sm"
+                                           role="button">Registration</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <div class="row text-sm-center">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <a th:href="@{/login}" class="btn-dark btn-lg shadow-sm"
+                                           role="button">Login</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--        End of content-->
+            <!--        th footer-->
+
+            <div class="align-bottom">
+                <div th:insert="fragments/footer::#footer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script  th:href="@{/vendor/jquery/jquery.min.js}"></script>
+<script  th:href="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- Core plugin JavaScript-->
+<script   th:href="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+<!-- Custom scripts for all pages-->
+<script  th:href="@{/js/sb-admin-2.min.js}"></script>
+</body>
+</html>

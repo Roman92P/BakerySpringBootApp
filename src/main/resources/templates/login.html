@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page Bakery Manager</title>
+    <!--    font awesome-->
+    <link th:href="@{/css/fontawesome.css}" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link th:href="@{/css/sb-admin-2.css}" rel="stylesheet">
+</head>
+<body id="page-top">
+
+    <div id="content-wrapper" class="d-flex flex-column" >
+        <div id="content">
+            <!--       th topbar-->
+            <nav class="navbar navbar-dark bg-primary navbar-expand-lg mb-5">
+            </nav>
+            <!--        Content-->
+            <div class=" container-fluid ">
+                <div class="container w-100 p-3">
+                    <div class="row ">
+                        <div class="col-12 align-content-center shadow-sm bg-dark ">
+
+                            <div class="container-fluid text-sm-center">
+                                <div th:if="${param.error}" class="text-light">
+                                    Invalid username and password.
+                                </div>
+                                <div th:if="${param.logout}">
+                                    You have been logged out.
+                                </div>
+                                <div th:if="${messageExist}">
+                                    <span th:text="${messageExist}"  class="text-info"></span>
+                                </div>
+                                <div th:if="${message}">
+                                    <span th:text="${message}"  class="text-success text-uppercase text-lg-center"></span>
+                                </div>
+                                <div th:if="${noActiveUser}">
+                                    <span th:text="${noActiveUser}"  class="text-danger text-uppercase text-lg-center"></span>
+                                </div>
+                                <div class="mt-5">
+                                    <form th:action="@{/login}" method="post">
+                                        <div><label class="text-light text-uppercase"> User Name : <input type="text"
+                                                                                                          name="username"/>
+                                        </label></div>
+                                        <div><label class="text-light text-uppercase"> Password : <input type="password"
+                                                                                                         name="password"/>
+                                        </label></div>
+                                        <div class="mb-lg-2"><input type="submit" value="Sign In"/></div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="mt-5 mb-lg-5">
+                        <div class="row text-sm-center">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <a th:href="@{/user/create-user}" class="btn-dark btn-lg shadow-sm"
+                                           role="button">Registration</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--        End of content-->
+            <!--        th footer-->
+        </div>
+    </div>
+<!-- End of Page Wrapper -->
+<footer>
+    <div class="fixed-bottom bg-dark">
+        <div th:insert="fragments/footer::#footer"></div>
+    </div>
+</footer>
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+<!-- Bootstrap core JavaScript-->
+<script type="text/javascript" th:src="@{/js/jquery.js}" ></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}" ></script>
+<!-- Core plugin JavaScript-->
+<script type="text/javascript" th:src="@{/js/jquery.easing.js}" ></script>
+<!-- Custom scripts for all pages-->
+<script type="text/javascript" th:src="@{/js/sb-admin-2.js}" ></script>
+</body>
+</html>

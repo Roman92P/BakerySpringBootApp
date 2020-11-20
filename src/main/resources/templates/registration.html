@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page Bakery Manager</title>
+    <!--    font awesome-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/vendor/fontawesome-free/css/all.css"
+          rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.css" rel="stylesheet">
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myInput");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+</head>
+<body id="page-top">
+<!--    th sidebar-->
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <!--       th topbar-->
+        <nav class="navbar bg-primary mx-auto shadow-lg p-3 mb-5 rounded">
+            <!-- Navbar content -->
+            <a class="navbar-brand">
+                <span class="text-light text-uppercase text-xl">Bakery manager registration</span>
+            </a>
+            <button class="navbar-toggler" type="button" style="color: white" data-toggle="collapse"
+                    data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fas fa-angle-down "></i>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="/"><i class="fas fa-arrow-circle-left "
+                                                                   aria-hidden="true"></i> Back </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="/login"><i class="fas fa-sign-in-alt"
+                                                                        aria-hidden="true"></i>
+                            login</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--        Content-->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-auto shadow-sm text-sm-center">
+                    <form action="#" method="post" th:action="@{/user/create-user}" th:object="${newUser}">
+                        <div class="form-group mb-5 mt-5">
+                            <label th:for="${newUser.email}">Email address
+                                <input type="email" class="form-control" placeholder="name@example.com"
+                                       th:field="${newUser.email}">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label th:for="${newUser.firstName}">First Name
+                                <input type="text" class="form-control" placeholder="Jan"
+                                       th:field="${newUser.firstName}">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label th:for="${newUser.lastName}">Last Name
+                                <input type="text" class="form-control" placeholder="Nowak"
+                                       th:field="${newUser.lastName}">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label th:for="${newUser.username}">Login/ User name
+                                <input type="text" class="form-control" placeholder="Piekorz777"
+                                       th:field="${newUser.username}" >
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label th:for="${newUser.password}">Login/ Password
+                                <input id="myInput" type="password" class="form-control"
+                                       th:field="${newUser.password}">
+                                <!-- An element to toggle between password visibility -->
+                                <input type="checkbox" onclick="myFunction()">Show Password
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Register" class="btn bg-primary text-light shadow-sm">
+                        </div>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--        End of content-->
+        <!--        th footer-->
+    </div>
+</div>
+<!-- End of Page Wrapper -->
+<footer>
+    <div class="fixed-bottom bg-dark">
+        <div th:insert="fragments/footer::#footer"></div>
+    </div>
+</footer>
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+<!-- Bootstrap core JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js"></script>
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/js/sb-admin-2.min.js"></script>
+</body>
+</html>

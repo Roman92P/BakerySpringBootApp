@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page Bakery Manager</title>
+    <!--    font awesome-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/vendor/fontawesome-free/css/all.css"
+          rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.css" rel="stylesheet">
+</head>
+<body id="page-top">
+
+<div id="wrapper">
+    <!--    th sidebar-->
+<!--    <div th:replace="fragments/sidebar::sidebar"></div>-->
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--       th topbar-->
+            <div th:insert="fragments/topbar::#topbar"></div>
+            <!--        Content-->
+            <div class="container-fluid h-50">
+                <div class="row mb-2">
+                    <div class="col-auto">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle btn-lg" type="button"
+                                    id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Navigator
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" th:href="@{/kitchen}">To kitchen</a>
+                                <a class="dropdown-item" th:href="@{/main}">To main page (for authorized)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div th:each="product : ${stockToSold}" style="display: inline-block">
+                            <div class="col">
+                                <div class="card" style="width: 10rem;">
+                                    <div class="card-body">
+                                        <a th:href="@{/cashRegister/createSoldItem/{id}(id=${product.id})}">
+                                            <button class="btn-primary">
+                                                <i class="fas fa-bread-slice"></i>
+                                                <h5 class="card-title"><p th:text="${product.productName}"></p></h5>
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <table class="table flex-column">
+                            <thead>
+                            <tr>
+                                <th>Product name</th>
+                                <th>Product price</th>
+                                <th>Product quantity</th>
+                                <th>Action</th>
+                            </tr>
+                            <thead>
+                            <tbody>
+                            <tr th:each="item: ${allItemsWithNullBill}" th:id="workOrderItem">
+                                <td th:text="${item.soldProductName}"></td>
+                                <td th:text="${item.soldProductPrice}"></td>
+                                <td th:text="${item.soldProductQuantity}"></td>
+                                <td>
+                                    <a th:href="@{#}">Edit</a>
+                                    <br>
+                                    <a th:href="@{#}">Remove</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot th:id="endOrder">
+                            <tr >
+                                <td th:colspan="3">
+                                    <a th:href="@{/cashRegister/finishOrder}" class="btn-lg btn-primary" style="text-decoration: none" >Complete bill</a>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--        End of content-->
+            <!--        th footer-->
+
+        </div>
+    </div>
+</div>
+<div th:insert="fragments/footer::#footer"></div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+<!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                <form th:action="@{/logout}" method="post">
+                    <input class="fa fa-id-badge" type="submit" value="Wyloguj">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js"></script>
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/js/sb-admin-2.min.js"></script>
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/js/kitchen.js"></script>
+</body>
+</html>

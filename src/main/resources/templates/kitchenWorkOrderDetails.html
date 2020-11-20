@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page Bakery Manager</title>
+    <!--    font awesome-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/vendor/fontawesome-free/css/all.css"
+          rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.css" rel="stylesheet">
+</head>
+<body id="page-top">
+
+<div id="wrapper">
+    <!--    th sidebar-->
+    <!--    <div th:replace="fragments/sidebar::sidebar"></div>-->
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--       th topbar-->
+            <div th:insert="fragments/topbar::#topbar"></div>
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-auto">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle btn-lg" type="button"
+                                    id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Navigator
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" th:href="@{/cashRegister}">To cash register</a>
+                                <a class="dropdown-item" th:href="@{/main}">To main page (for authorized)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--        Content-->
+            <div class="container-fluid">
+                <div style="overflow:auto">
+                    <table class="table table-hover">
+                        <thead>
+                        <td>Work order ID</td>
+                        <td>Product</td>
+                        <td>Quantity</td>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${workOrder}">
+                            <td th:text="${product.manufactured.id}"></td>
+                            <td th:text="${product.product.name}"></td>
+                            <td th:text="${product.quantity}"></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td>
+<!--                                <button type="button" class="btn btn-primary btn-lg" th:href="@{/kitchen}">Back to-->
+<!--                                    kitchen-->
+<!--                                </button>-->
+                                <a th:href="@{/kitchen}" class="btn btn-primary btn-lg" role="button">Back to kitchen</a>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <!--        End of content-->
+            <!--        th footer-->
+            <div th:insert="fragments/footer::#footer"></div>
+            </table>
+        </div>
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+<!--                    <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                    <form th:action="@{/logout}" method="post">
+                        <input class="fa fa-id-badge" type="submit" value="Wyloguj">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="/static/startbootstrap-sb-admin-2-gh-pages/js/sb-admin-2.min.js"></script>
+</body>
+</html>

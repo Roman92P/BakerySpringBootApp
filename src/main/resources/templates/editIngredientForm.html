@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page Bakery Manager</title>
+    <!--    font awesome-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/vendor/fontawesome-free/css/all.css"
+          rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="/static/startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.css" rel="stylesheet">
+</head>
+<body id="page-top">
+
+<div id="wrapper">
+    <!--    th sidebar-->
+    <div th:replace="fragments/sidebar::sidebar"></div>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--       th topbar-->
+            <div th:insert="fragments/topbar::#topbar"></div>
+            <!--        Content-->
+            <div class="container-fluid h-50">
+                <div class="row">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="type">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1">Choose
+                                        unit of Measurement
+                                    </div>
+                                </label>
+                                <div class="col-6">
+                                    <select name="typeOfQuantity" id="type">
+                                        <option>Select type quantity for <span th:text="${ingredient.name}"></span></option>
+                                        <option value="litr" id="l">Liters</option>
+                                        <option value="quantity" id="q">Quantity</option>
+                                        <option value="wieght" id="w">Weight</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-12 shadow-lg mt-3">
+                                <form id="litrProduct" style="display: none" action="#" th:action="@{/ingredient/add}" th:object="${ingredient}" method="post"
+                                      class="mt-2">
+                                    <input hidden name="id" th:value="${ingredient.id}">
+                                    <div class="col-4">
+                                        <label th:for="*{name}">
+                                            <div class="text-xs font-weight-bold text-uppercase mb-1">Name of
+                                                ingredient
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" th:field="*{name}"/>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <div  class="text-xs font-weight-bold  text-uppercase mb-1">Litre
+                                            unit of measurement
+                                        </div>
+                                        <div class="col-6">
+                                            <input  th:field="*{litr}" type="number" step="0.01"/>
+                                            <input  hidden th:value="0" th:attr="name='weight'">
+                                            <input  hidden th:value="0" th:attr="name='quantity'">
+                                        </div>
+                                        <br>
+                                        <ul th:if="${#fields.hasErrors('*')}">
+                                            <li class="text-danger" th:each="err : ${#fields.errors('*')}"
+                                                th:text="${err}">Input is incorrect
+                                            </li>
+                                        </ul>
+                                        <div class="row">
+                                            <div class="col-auto mb-5">
+                                                <button type="submit" class="btn btn-primary">Add ingredient</button>
+                                            </div>
+                                            <div class="col-auto mb-5">
+                                                <a th:href="@{/ingredient/edit/{id}(id=${ingredient.id})}" role="button" class="btn btn-primary shadow-lg" id="cancel">Cancel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <form id="weightProduct" style="display: none" action="#" th:action="@{/ingredient/add}" th:object="${ingredient}" method="post"
+                                      class="mt-2">
+                                    <input hidden name="id" th:value="${ingredient.id}">
+                                    <div class="col-4">
+                                        <label th:for="*{name}">
+                                            <div class="text-xs font-weight-bold text-uppercase mb-1">Name of
+                                                ingredient
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" th:field="*{name}"/>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div id="title" class="text-xs font-weight-bold  text-uppercase mb-1">Kg
+                                            unit of measurement
+                                        </div>
+                                        <div class="col-6">
+                                            <input  th:field="*{weight}" type="number" step="0.01"/>
+                                            <input  hidden th:value="0" th:attr="name='litr'">
+                                            <input  hidden th:value="0" th:attr="name='quantity'">
+                                        </div>
+                                        <br>
+                                        <ul th:if="${#fields.hasErrors('*')}">
+                                            <li class="text-danger" th:each="err : ${#fields.errors('*')}"
+                                                th:text="${err}">Input is incorrect
+                                            </li>
+                                        </ul>
+                                        <div class="row">
+                                            <div class="col-auto mb-5">
+                                                <button type="submit" class="btn btn-primary">Add ingredient</button>
+                                            </div>
+                                            <div class="col-auto mb-5">
+                                                <a th:href="@{/ingredient/edit/{id}(id=${ingredient.id})}" role="button" class="btn btn-primary shadow-lg" id="cancel">Cancel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <form id="quantityProduct" style="display: none" action="#" th:action="@{/ingredient/add}" th:object="${ingredient}" method="post"
+                                      class="mt-2">
+                                    <input hidden name="id" th:value="${ingredient.id}">
+                                    <div class="col-4">
+                                        <label th:for="*{name}">
+                                            <div class="text-xs font-weight-bold text-uppercase mb-1">Name of
+                                                ingredient
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" th:field="*{name}"/>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div  class="text-xs font-weight-bold  text-uppercase mb-1">Pcs
+                                            unit of measurement
+                                        </div>
+                                        <div class="col-6">
+                                            <input  th:field="*{quantity}" type="number" step="0.01"/>
+                                            <input  hidden th:value="0" th:attr="name='weight'">
+                                            <input  hidden th:value="0" th:attr="name='litr'">
+                                        </div>
+                                        <br>
+                                        <ul th:if="${#fields.hasErrors('*')}">
+                                            <li class="text-danger" th:each="err : ${#fields.errors('*')}"
+                                                th:text="${err}">Input is incorrect
+                                            </li>
+                                        </ul>
+                                        <div class="row">
+                                            <div class="col-auto mb-5">
+                                                <button type="submit" class="btn btn-primary">Add ingredient</button>
+                                            </div>
+                                            <div class="col-auto mb-5">
+                                                <a th:href="@{/ingredient/edit/{id}(id=${ingredient.id})}" role="button" class="btn btn-primary shadow-lg" id="cancel">Cancel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto">
+                        <a th:href="@{/main}" role="button" class="btn btn-md btn-dark shadow-sm">Cancel</a>
+                    </div>
+                </div>
+            </div>
+            <!--        End of content-->
+            <!--        th footer-->
+            <div th:insert="fragments/footer::#footer"></div>
+        </div>
+    </div>
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+<!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                <form th:action="@{/logout}" method="post">
+                    <input class="fa fa-id-badge" type="submit" value="Wyloguj">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery/jquery.min.js"></script>
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/js/sb-admin-2.min.js"></script>
+<script src="/static/startbootstrap-sb-admin-2-gh-pages/js/newAddingredient.js"></script>
+</body>
+</html>
