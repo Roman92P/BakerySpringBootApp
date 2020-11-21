@@ -6,6 +6,7 @@ import com.bakery.shark.bakery_shark.app.model.User;
 import com.bakery.shark.bakery_shark.app.product.ProductService;
 import com.bakery.shark.bakery_shark.app.user.CurrentUser;
 import com.bakery.shark.bakery_shark.app.user.UserService;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ import java.util.*;
 public class LoginController {
 
     Logger logger = LoggerFactory.getLogger(LoginController.class);
+
+    @Autowired
+    private Gson gson;
 
     @Autowired
     UserService userService;
@@ -83,9 +87,12 @@ public class LoginController {
                 image = Base64.getEncoder().encodeToString(img);
             }
             allPictures.put(p.getId(), image);
+            logger.error("All products and their img's: "+" "+ p.getId() + " "+image);
         }
 
         model.addAttribute("images", allPictures);
+        String imgToJsonFormat = gson.toJson(allPictures);
+        model.addAttribute("allImgJson", imgToJsonFormat);
 
         return "offerView";
     }

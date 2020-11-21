@@ -9,6 +9,8 @@
           rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->
     <link href="/static/css/sb-admin-2.css" rel="stylesheet">
+
+
 </head>
 <body id="page-top">
 
@@ -21,7 +23,7 @@
             <!--       th topbar-->
             <div th:insert="fragments/topbar::#topbar"></div>
             <!--        Content-->
-            <div class="container-fluid">
+            <div class="container-fluid" id="container">
                 <div th:each="product : ${bakeryProducts}" style="display: inline-block">
                     <div class="row">
                         <div class="card m-3">
@@ -38,13 +40,7 @@
                                             <br>
                                         </div>
                                     </div>
-<!--                                    <div class="col-6">-->
-<!--                                        <div th:each="${images}">-->
-<!--                                            <div th:text="${images.entry()}"></div>-->
-<!--                                        </div>-->
-<!--                                                <img height="600" width="600" alt="productImg"-->
-<!--                                                     th:src="*{'data:image/png;base64,'+img}"/>-->
-<!--                                        </div>-->
+                                    <div id="imgHolder" th:value="${product.id}">
                                     </div>
                                 </div>
                             </div>
@@ -52,11 +48,12 @@
                     </div>
                 </div>
             </div>
-            <!--        End of content-->
-            <!--        th footer-->
-            <div th:insert="fragments/footer::#footer"></div>
         </div>
+        <!--        End of content-->
+        <!--        th footer-->
+        <div th:insert="fragments/footer::#footer"></div>
     </div>
+</div>
 
 <!-- End of Page Wrapper -->
 
@@ -91,5 +88,6 @@
 <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
 <!-- Custom scripts for all pages-->
 <script src="/static/js/sb-admin-2.min.js"></script>
+<script src="/static/js/offerProduct.js"></script>
 </body>
 </html>
