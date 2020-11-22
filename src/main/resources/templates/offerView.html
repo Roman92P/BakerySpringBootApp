@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,14 +16,27 @@
 
 <div id="wrapper">
     <!--    th sidebar-->
-    <div th:replace="fragments/sidebar::sidebar"></div>
-
+    <div sec:authorize="isAuthenticated()">
+        <div th:replace="fragments/sidebar::sidebar"></div>
+    </div>
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <!--       th topbar-->
-            <div th:insert="fragments/topbar::#topbar"></div>
+            <div th:insert="fragments/topbar::#topbar">
+            </div>
             <!--        Content-->
             <div class="container-fluid" id="container">
+                <div class="row">
+                    <div class="col">
+                        <div sec:authorize="!isAuthenticated()">
+                            <div class="row">
+                                <div class="col">
+                                    <a class="btn btn-primary" role="button" th:href="@{/}"> Back </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div th:each="product : ${bakeryProducts}" style="display: inline-block">
                     <div class="row">
                         <div class="card m-3">
@@ -33,11 +46,14 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h5 class="card-title">Ingredients: </h5>
-                                        <div th:each="ingredient:${product.recipe.recipeItemList}">
-                                            <p class="card-text"><span th:text="${ingredient.ingredients.name}"></span>
-                                            </p>
-                                            <br>
+                                        <div sec:authorize="isAuthenticated()">
+                                            <h5 class="card-title">Ingredients: </h5>
+                                            <div th:each="ingredient:${product.recipe.recipeItemList}">
+                                                <p class="card-text"><span
+                                                        th:text="${ingredient.ingredients.name}"></span>
+                                                </p>
+                                                <br>
+                                            </div>
                                         </div>
                                     </div>
                                     <div id="imgHolder" th:value="${product.id}">
@@ -63,20 +79,22 @@
 </a>
 
 <!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" th:href="@{/login}">Logout</a>
+<div sec:authorize="isAuthenticated()">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" th:href="@{/login}">Logout</a>
+                </div>
             </div>
         </div>
     </div>

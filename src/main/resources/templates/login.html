@@ -15,7 +15,31 @@
     <div id="content-wrapper" class="d-flex flex-column" >
         <div id="content">
             <!--       th topbar-->
-            <nav class="navbar navbar-dark bg-primary navbar-expand-lg mb-5">
+            <nav class="navbar bg-primary mx-auto shadow-lg p-3 mb-5 rounded">
+                <!-- Navbar content -->
+                <a class="navbar-brand">
+                    <span class="text-light text-uppercase text-xl">Bakery manager login</span>
+                </a>
+                <button class="navbar-toggler" type="button" style="color: white" data-toggle="collapse"
+                        data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <i class="fas fa-angle-down "></i>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/"><i class="fas fa-arrow-circle-left "
+                                                                       aria-hidden="true"></i> Back </a>
+                        </li>
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link text-light" href="/login"><i class="fas fa-sign-in-alt"-->
+<!--                                                                            aria-hidden="true"></i>-->
+<!--                                login</a>-->
+<!--                        </li>-->
+                    </ul>
+                </div>
             </nav>
             <!--        Content-->
             <div class=" container-fluid ">
@@ -61,6 +85,18 @@
                                     <div class="col">
                                         <a th:href="@{/user/create-user}" class="btn-dark btn-lg shadow-sm"
                                            role="button">Registration</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 mb-lg-5">
+                        <div class="row text-sm-center">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <a th:href="@{/}" class="btn-dark btn-lg shadow-sm"
+                                           role="button"><i class="fas fa-home"></i> Home</a>
                                     </div>
                                 </div>
                             </div>

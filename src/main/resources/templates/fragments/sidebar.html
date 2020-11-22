@@ -38,7 +38,10 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Admin:</h6>
-                    <a class="collapse-item" th:href="@{/admin/createUser}">Colors</a>
+                    <div sec:authorize="hasRole('ADMIN')">
+                    <a class="collapse-item" th:href="@{/admin/createUser}">Create new User</a>
+                    </div>
+                    <a class="collapse-item" th:href="@{/admin/askForRights}">Ask for Admin rights</a>
                 </div>
             </div>
         </li>
