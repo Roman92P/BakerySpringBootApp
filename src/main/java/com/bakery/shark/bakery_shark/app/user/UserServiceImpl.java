@@ -10,8 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,6 +37,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUserName(String name) {
         return userRepository.findByUsername(name);
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        User byUsername = userRepository.findByUsername(user.getUsername());
+        if(byUsername!=null){
+            byUsername.setId(user.getId());
+            byUsername.setActive(user.isActive());
+            byUsername.setEmail(user.getEmail());
+            byUsername.setEnabled(user.isEnabled());
+            byUsername.setFirstName(user.getFirstName());
+            byUsername.setLastName(user.getLastName());
+            byUsername.setPassword(user.getPassword());
+            byUsername.setUsername(user.getUsername());
+            byUsername.setRoles(user.getRoles());
+            userRepository.save(byUsername);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -78,5 +99,12 @@ public class UserServiceImpl implements UserService {
 
         return true;
     }
+
+    @Override
+    public Optional<User> findByUserId(Long id) {
+        return userRepository.findById(id);
+    }
+
+
 
 }

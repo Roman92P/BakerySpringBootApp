@@ -33,4 +33,6 @@ INSERT INTO produced (product_name, product_price, product_stock_quantity) VALUE
 INSERT INTO produced (product_name, product_price, product_stock_quantity) VALUES ('Gruziński chleb żytni', 2.00, 4);
 INSERT INTO produced (product_name, product_price, product_stock_quantity) VALUES ('Chleb polski', 2.50, 6);
 INSERT INTO user(active, email, enabled, first_name, last_name, password, username) VALUES (true,'forcodeemailroman@gmail.com',true,'Admin','Admin','$2a$10$scw/kihZM9TA8/9JshJnVuc38aqBUI2j75gWsIfuXfTkoIx3Lrc6K','Admin');
+INSERT INTO user(active, email, enabled, first_name, last_name, password, username) VALUES (true,'test@test.com',true,'User','User','$2a$10$scw/kihZM9TA8/9JshJnVuc38aqBUI2j75gWsIfuXfTkoIx3Lrc6K','Usero');
 INSERT INTO user_role(user_id, role_id) VALUES (1,1);
+INSERT INTO user_role(user_id, role_id) VALUES (2,2);
