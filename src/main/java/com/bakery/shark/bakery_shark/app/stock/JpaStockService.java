@@ -1,10 +1,13 @@
 package com.bakery.shark.bakery_shark.app.stock;
 
 
+import com.bakery.shark.bakery_shark.app.manufacture.JpaManufactureItemService;
 import com.bakery.shark.bakery_shark.app.manufacture.ManufacturedRepository;
 import com.bakery.shark.bakery_shark.app.model.ManufactureItem;
 import com.bakery.shark.bakery_shark.app.model.Manufactured;
 import com.bakery.shark.bakery_shark.app.model.Stock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
@@ -15,12 +18,17 @@ import java.util.Set;
 @Service
 public class JpaStockService implements StockService {
 
+
+    Logger logger = LoggerFactory.getLogger(JpaStockService.class);
+
     private final StockRepository stockRepository;
     private final ManufacturedRepository manufacturedRepository;
+    private final JpaManufactureItemService jpaManufactureItemService;
 
-    public JpaStockService(StockRepository stockRepository, ManufacturedRepository manufacturedRepository) {
+    public JpaStockService(StockRepository stockRepository, ManufacturedRepository manufacturedRepository, JpaManufactureItemService jpaManufactureItemService) {
         this.stockRepository = stockRepository;
         this.manufacturedRepository = manufacturedRepository;
+        this.jpaManufactureItemService = jpaManufactureItemService;
     }
 
     @Override
@@ -45,8 +53,10 @@ public class JpaStockService implements StockService {
 
     @Override
     public void addStock(Manufactured manufactured) {
+        List<ManufactureItem> allByManufactureId = jpaManufactureItemService.getAllByManufactureId(manufactured.getId());
         Set<ManufactureItem> manufactureItems = manufactured.getManufactureItems();
-        Iterator<ManufactureItem> itemIterator = manufactureItems.iterator();
+        logger.error("Size of manufactureItems after production: "+ allByManufactureId.size());
+        Iterator<ManufactureItem> itemIterator = allByManufactureId.iterator();
         while (itemIterator.hasNext()) {
             ManufactureItem next = itemIterator.next();
             String productName = next.getProduct().getName();

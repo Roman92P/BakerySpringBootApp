@@ -10,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -59,6 +58,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void addNewUserByAdmin(User user) {
+        User byUsername = userRepository.findByUsername(user.getUsername());
+        String password = user.getPassword();
+        if(byUsername ==null){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setEnabled(true);
+            Role userRole = roleRepository.findByName("ROLE_USER");
+            user.setRoles(new HashSet<Role>(Collections.singletonList(userRole)));
+            userRepository.save(user);
+        }
+        if(!StringUtils.isEmpty(user.getEmail())){
+            String message = String.format("Hello %s!\nWelcome to Bakery Manager.\nPlease find below credencials.\n" +
+                    "Login: %s \nPassword: %s \n Br Admin Bakery Shark", user.getFirstName(), user.getUsername(), password);
+            mailSender.send(user.getEmail(), "From Admin Bakery Manager", message);
+        }
+    }
+
+    @Override
     public boolean saveUser(User user) {
 
         //for email
@@ -84,6 +101,8 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
+
+
 
     @Override
     public boolean activateUser(String code) {

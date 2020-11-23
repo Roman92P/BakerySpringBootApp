@@ -40,4 +40,8 @@ public class JpaManufacturedService implements ManufacturedService {
     public void addManufactured(Manufactured manufactured) {
         manufacturedRepository.save(manufactured);
     }
+
+    public Manufactured getManufacturedNotFinalized() {
+        return manufacturedRepository.findByFinalizedWorkOrderFalse();
+    }
 }

@@ -15,4 +15,5 @@ public interface ManufactureItemRepository extends JpaRepository<ManufactureItem
         ManufactureItem findByProduct_NameAndManufacturedNull(String productName);
 
 
+
 }

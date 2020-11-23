@@ -9,6 +9,11 @@
           rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->
     <link href="/static/css/sb-admin-2.css" rel="stylesheet">
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </head>
 <body id="page-top">
 
@@ -33,6 +38,15 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" th:href="@{/kitchen}">To kitchen</a>
                                 <a class="dropdown-item" th:href="@{/main}">To main page (for authorized)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <button onclick="goBack()" class="btn btn-primary">Go Back</button>
                             </div>
                         </div>
                     </div>

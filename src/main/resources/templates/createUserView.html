@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main page Bakery Manager</title>
+    <!--    font awesome-->
+    <link href="/static/vendor/fontawesome-free/css/all.css"
+          rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="/static/css/sb-admin-2.css" rel="stylesheet">
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</head>
+<body id="page-top">
+
+<div id="wrapper">
+    <!--    th sidebar-->
+    <div th:replace="fragments/sidebar::sidebar"></div>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--       th topbar-->
+            <div th:insert="fragments/topbar::#topbar"></div>
+            <!--        Content-->
+            <div class="container-fluid" id="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <button onclick="goBack()" class="btn btn-primary">Go Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="card m-3">
+                            <h5 class="card-header">Add new User</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <form action="#" method="post" th:action="@{/admin/createUser}" th:object="${user}">
+                                            <div class="form-group mb-5 mt-5">
+                                                <label th:for="${user.email}">Email address
+                                                    <input type="email" class="form-control" placeholder="name@example.com"
+                                                           th:field="${user.email}">
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <label th:for="${user.firstName}">First Name
+                                                    <input type="text" class="form-control" placeholder="Jan"
+                                                           th:field="${user.firstName}">
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <label th:for="${user.lastName}">Last Name
+                                                    <input type="text" class="form-control" placeholder="Nowak"
+                                                           th:field="${user.lastName}">
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <label th:for="${user.username}">Login/ User name
+                                                    <input type="text" class="form-control" placeholder="Piekorz777"
+                                                           th:field="${user.username}" >
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <label th:for="${user.password}">Login/ Password
+                                                    <input id="myInput" type="password" class="form-control"
+                                                           th:field="${user.password}">
+                                                    <!-- An element to toggle between password visibility -->
+                                                    <input type="checkbox" onclick="myFunction()">Show Password
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" value="Register" class="btn bg-primary text-light shadow-sm">
+                                            </div>
+                                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <!--        End of content-->
+            <!--        th footer-->
+            <div th:insert="fragments/footer::#footer"></div>
+        </div>
+    </div>
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" th:href="@{/login}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="/static/vendor/jquery/jquery.min.js"></script>
+<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/static/js/sb-admin-2.min.js"></script>
+</body>
+</html>

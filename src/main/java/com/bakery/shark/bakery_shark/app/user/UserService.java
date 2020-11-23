@@ -14,4 +14,5 @@ public interface UserService {
     boolean activateUser(String code);
     Optional<User> findByUserId(Long id);
     boolean updateUser(User user);
+    void addNewUserByAdmin(User user);
 }

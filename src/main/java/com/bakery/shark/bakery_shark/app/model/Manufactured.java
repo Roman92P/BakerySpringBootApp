@@ -28,6 +28,12 @@ public class Manufactured {
 
     @OneToMany(mappedBy = "manufactured", fetch = FetchType.EAGER)
     private Set<ManufactureItem> manufactureItems = new HashSet<>();
+    @Column(nullable = false)
+    private boolean finalizedWorkOrder;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Manufactured() {
     }
