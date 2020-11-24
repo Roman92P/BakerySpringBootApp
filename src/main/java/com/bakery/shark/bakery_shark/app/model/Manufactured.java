@@ -3,6 +3,8 @@ package com.bakery.shark.bakery_shark.app.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,6 +33,7 @@ public class Manufactured {
     @Column(nullable = false)
     private boolean finalizedWorkOrder;
 
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

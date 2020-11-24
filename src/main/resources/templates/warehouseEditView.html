@@ -37,32 +37,69 @@
                                 <td th:text="${ing.id}"></td>
                                 <td th:text="${ing.name}"></td>
                                 <td>
-                                    <form action="#" method="post" th:action="@{/ingredient/warehouse/edit}" th:object="${ingredient}" >
+                                    <form action="#" method="post" th:action="@{/ingredient/warehouse/edit}"
+                                          th:object="${ingredient}">
                                         <input type="hidden" th:value="${ing.id}" th:attr="name='id'"/>
                                         <input type="hidden" th:value="${ing.name}" th:attr="name='name'"/>
-                                        <div th:if="${ing.litr}!=0">
-                                            <label th:for="${ingredient.litr}">
-                                                <p  th:text="${ing.litr}"></p>
-                                                <input  type="number" th:step="0.01"  th:value="${ing.litr}" th:attr="name='litr'" placeholder="enter litr quantity">
-                                                <input hidden th:value="${ing.weight}" th:attr="name='weight'">
-                                                <input hidden th:value="${ing.quantity}" th:attr="name='quantity'">
-                                            </label>
+                                        <div id="toDelIfAllNull">
+                                            <div th:if="${ing.litr}!=0">
+                                                <label th:for="${ingredient.litr}">
+                                                    <p th:text="${ing.litr}"></p>
+                                                    <input type="number" th:step="0.01" min="0" th:value="${ing.litr}"
+                                                           th:attr="name='litr'" placeholder="enter litr quantity">
+                                                    <input hidden th:value="${ing.weight}" th:attr="name='weight'">
+                                                    <input hidden th:value="${ing.quantity}" th:attr="name='quantity'">
+                                                </label>
+                                            </div>
+                                            <div th:if="${ing.quantity}!=0">
+                                                <label th:for="${ingredient.quantity}">
+                                                    <p th:text="${ing.quantity}"></p>
+                                                    <input type="number" min="0" th:step="0.01"
+                                                           th:value="${ing.quantity}"
+                                                           th:attr="name='quantity'">
+                                                    <input hidden th:value="${ing.weight}" th:attr="name='weight'">
+                                                    <input hidden th:value="${ing.litr}" th:attr="name='litr'">
+                                                </label>
+                                            </div>
+                                            <div th:if="${ing.weight}!=0">
+                                                <label th:for="${ingredient.weight}">
+                                                    <p th:text="${ing.weight}"></p>
+                                                    <input type="number" th:step="0.01" min="0" th:value="${ing.weight}"
+                                                           th:attr="name='weight'">
+                                                    <input hidden th:value="${ing.litr}" th:attr="name='litr'">
+                                                    <input hidden th:value="${ing.quantity}" th:attr="name='quantity'">
+                                                </label>
+                                            </div>
                                         </div>
-                                        <div th:if="${ing.quantity}!=0">
-                                            <label th:for="${ingredient.quantity}">
-                                                <p  th:text="${ing.quantity}"></p>
-                                                <input  type="number" th:step="0.01" th:value="${ing.quantity}" th:attr="name='quantity'">
-                                                <input hidden  th:value="${ing.weight}" th:attr="name='weight'">
-                                                <input hidden th:value="${ing.litr}" th:attr="name='litr'">
-                                            </label>
-                                        </div>
-                                        <div th:if="${ing.weight}!=0">
-                                            <label th:for="${ingredient.weight}" >
-                                                <p th:text="${ing.weight}"></p>
-                                                <input type="number" th:step="0.01" th:value="${ing.weight}" th:attr="name='weight'">
-                                                <input hidden th:value="${ing.litr}" th:attr="name='litr'">
-                                                <input hidden th:value="${ing.quantity}" th:attr="name='quantity'">
-                                            </label>
+                                        <div th:if="${ing.litr}==0 and ${ing.quantity}==0 and ${ing.weight}==0">
+                                            <div class="row">
+                                                <select id="untOfMs">
+                                                    <option>Select unit of measure</option>
+                                                    <option value="l">Litr</option>
+                                                    <option value="q">Quantity</option>
+                                                    <option value="w">Weight</option>
+                                                </select>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label th:for="*{litr}">
+                                                        <input type="number" id="lit" th:step="0.01"
+                                                               th:field="*{litr}" style="display: none">
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label th:for="*{quantity}">
+                                                        <input type="number" id="quan" th:step="0.01"
+                                                               th:field="*{quantity}" style="display: none">
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <label th:for="*{weight}">
+                                                        <input type="number" id="weig" th:step="0.01"
+                                                               th:field="*{weight}" style="display: none">
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
                                         <input type="submit" value="Edit"/>
                                         <br>
@@ -111,7 +148,7 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-<!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                <!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
                 <form th:action="@{/logout}" method="post">
                     <input class="fa fa-id-badge" type="submit" value="Wyloguj">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -127,5 +164,6 @@
 <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
 <!-- Custom scripts for all pages-->
 <script src="/static/js/sb-admin-2.min.js"></script>
+<script src="/static/js/warehouse.js"></script>
 </body>
 </html>
