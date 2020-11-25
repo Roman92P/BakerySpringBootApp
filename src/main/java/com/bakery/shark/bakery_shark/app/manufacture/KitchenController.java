@@ -26,6 +26,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.lang.*;
 
 @Controller
 @AllArgsConstructor
@@ -54,8 +55,8 @@ public class KitchenController {
             copyIngredientstoWorkIngredients();
         }
         if (allByNullManufactureId.size() != 0 && request.getSession().getAttribute("manufactured") == null) {
-            allByNullManufactureId.stream()
-                    .forEach(manufactureItem -> jpaManufactureItemService.deleteManufactureItem(manufactureItem));
+            allByNullManufactureId
+                    .forEach(jpaManufactureItemService::deleteManufactureItem);
             return "redirect:/kitchen";
         }
         //show only products that can be manufactured
@@ -236,11 +237,13 @@ public class KitchenController {
             jpaManufacturedService.updateManufactured(finalManufactured);
             manufactureItem.setManufactured(finalManufactured);
             jpaManufactureItemService.updateManufactureItem(manufactureItem);
-            addProduced(jpaManufacturedService.getManufactured(manufactured1).orElseThrow(EntityNotFoundException::new));
         }
         //add to Stock
-        jpaStockService.addStock(jpaManufacturedService.getManufactured(manufactured1)
-                .orElseThrow(EntityNotFoundException::new));
+        Manufactured manufactured = jpaManufacturedService.getManufactured(manufactured1).orElseThrow(EntityNotFoundException::new);
+        jpaStockService.addStock(manufactured);
+
+        List<ManufactureItem> allByManufactureId = jpaManufactureItemService.getAllByManufactureId(manufactured1);
+        jpaProducedService.addManufacturedToProduced(allByManufactureId);
 
         model.addAttribute("finalManufactureId", manufactured1);
         session.removeAttribute("manufactured");
@@ -250,18 +253,8 @@ public class KitchenController {
     @RequestMapping("/summarizing")
     public String showBookedOrderDetails(HttpServletRequest request, Model model) {
         String finalManufactureId = request.getParameter("finalManufactureId");
+//        addProduced();
         model.addAttribute("workOrder", jpaManufactureItemService.getAllByManufactureId(Long.parseLong(finalManufactureId)));
         return "kitchenWorkOrderDetails";
-    }
-
-    private void addProduced(Manufactured manufactured) {
-        Set<ManufactureItem> manufactureItems = manufactured.getManufactureItems();
-        Produced produced = new Produced();
-        for ( ManufactureItem item : manufactureItems ) {
-            produced.setProductName(item.getProduct().getName());
-            produced.setProductPrice(item.getProduct().getPrice());
-            produced.setProductStockQuantity(item.getQuantity());
-        }
-        jpaProducedService.addProduced(produced);
     }
 }

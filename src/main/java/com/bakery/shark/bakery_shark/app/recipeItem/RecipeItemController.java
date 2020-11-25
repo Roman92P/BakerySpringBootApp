@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -71,7 +70,7 @@ public class RecipeItemController {
     @RequestMapping("/add/{id}")
     public String recipeItemForm(Model model, @PathVariable long id, HttpServletRequest request) {
         logger.debug("test recipe id sent to controller from addRecipeView: " + id);
-        Recipe certainRecipe = recipeService.getRecipe(id).orElseThrow(EntityExistsException::new);
+        Recipe certainRecipe = recipeService.getRecipe(id).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("recipeId", id);
         model.addAttribute("recipeByRecipeId", certainRecipe);
         RecipeItem recipeItem = new RecipeItem();

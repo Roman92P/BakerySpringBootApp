@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import javax.validation.Validator;
 import java.util.List;
@@ -54,14 +54,14 @@ public class IngredientController {
 
     @RequestMapping("/delete/{id}")
     public String deleteIngredient(@PathVariable long id) {
-        Ingredient ingredient = ingredientService.getIngredient(id).orElseThrow(EntityExistsException::new);
+        Ingredient ingredient = ingredientService.getIngredient(id).orElseThrow(EntityNotFoundException::new);
         ingredientService.deleteIngredient(ingredient);
         return "redirect:/main";
     }
 
     @RequestMapping("/edit/{id}")
     public String editIngredientForm(@PathVariable long id, Model model) {
-        Ingredient certainIngredient = ingredientService.getIngredient(id).orElseThrow(EntityExistsException::new);
+        Ingredient certainIngredient = ingredientService.getIngredient(id).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("ingredient", certainIngredient);
         return "editIngredientForm";
     }

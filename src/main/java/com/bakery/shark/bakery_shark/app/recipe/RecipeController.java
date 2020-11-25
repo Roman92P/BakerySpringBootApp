@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
@@ -55,14 +55,14 @@ public class RecipeController {
 
     @RequestMapping("/delete/{id}")
     public String deleteRecipe(@PathVariable long id){
-        Recipe certainRecipe = recipeService.getRecipe(id).orElseThrow(EntityExistsException::new);
+        Recipe certainRecipe = recipeService.getRecipe(id).orElseThrow(EntityNotFoundException::new);
         recipeService.deleteRecipe(certainRecipe);
         return "redirect:/main";
     }
 
     @RequestMapping("/edit/{id}")
     public String editRecipe(@PathVariable long id, Model model){
-        Recipe recipe = recipeService.getRecipe(id).orElseThrow(EntityExistsException::new);
+        Recipe recipe = recipeService.getRecipe(id).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("recipe", recipe);
         return "addRecipeView";
     }

@@ -72,32 +72,73 @@
                                             </div>
                                         </div>
                                         <div th:if="${ing.litr}==0 and ${ing.quantity}==0 and ${ing.weight}==0">
-                                            <div class="row">
-                                                <select id="untOfMs">
-                                                    <option>Select unit of measure</option>
-                                                    <option value="l">Litr</option>
-                                                    <option value="q">Quantity</option>
-                                                    <option value="w">Weight</option>
-                                                </select>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label th:for="*{litr}">
-                                                        <input type="number" id="lit" th:step="0.01"
-                                                               th:field="*{litr}" style="display: none">
-                                                    </label>
-                                                </div>
-                                                <div class="col">
-                                                    <label th:for="*{quantity}">
-                                                        <input type="number" id="quan" th:step="0.01"
-                                                               th:field="*{quantity}" style="display: none">
-                                                    </label>
-                                                </div>
-                                                <div class="col">
-                                                    <label th:for="*{weight}">
-                                                        <input type="number" id="weig" th:step="0.01"
-                                                               th:field="*{weight}" style="display: none">
-                                                    </label>
+                                            <!--                                            <a class="btn-dark btn" role="button" th:href="@{/ingredient/edit/{id}(id=${ing.id})}">Edit ingredient</a>-->
+                                            <!--                                            modal if ingredient quantity is zero-->
+                                            <h5>Ingredient is empty. Add some quantity</h5>
+                                            <!-- Button trigger modal -->
+                                            <button id="addBtn" type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#exampleModal">
+                                                Add quantity
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                                 aria-labelledby="warehouseModal" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="warehouseModal">Choose measure
+                                                                and set quantity for <span class="btn-primary"
+                                                                                           th:text="${ing.name}"></span>
+                                                            </h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <form action="#"
+                                                                  th:action="@{/ingredient/edit/{id}(id=${ing.id})}"
+                                                                  method="post" th:object="${ingredient}">
+                                                                <div class="row">
+                                                                    <select id="untOfMs">
+                                                                        <option>Select unit of measure</option>
+                                                                        <option value="l">Litr</option>
+                                                                        <option value="q">Quantity</option>
+                                                                        <option value="w">Weight</option>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                        <label th:for="*{litr}">
+                                                                            <input type="number" id="lit"
+                                                                                   th:step="0.01"
+                                                                                   th:field="*{litr}"
+                                                                                   style="display: none">
+                                                                        </label>
+                                                                        <label th:for="*{quantity}">
+                                                                            <input type="number" id="quan"
+                                                                                   th:step="0.01"
+                                                                                   th:field="*{quantity}"
+                                                                                   style="display: none">
+                                                                        </label>
+                                                                        <label th:for="*{weight}">
+                                                                            <input type="number" id="weig"
+                                                                                   th:step="0.01"
+                                                                                   th:field="*{weight}"
+                                                                                   style="display: none">
+                                                                        </label>
+                                                                </div>
+                                                                <input type="submit" class="btn-primary btn shadow-sm">
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Close
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

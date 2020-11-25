@@ -14,7 +14,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
@@ -39,7 +38,7 @@ public class ProductController {
     private final JpaRecipeService recipeService;
 
     @GetMapping("/addImg/{id}")
-    public String uploadImgToProduct(@PathVariable Long id, Model model){
+    public String uploadImgToProduct( @PathVariable Long id, Model model){
         Product product = jpaProductService.getProduct(id).orElseThrow(EntityNotFoundException::new);
         model.addAttribute("productForPhoto", product);
 
@@ -47,14 +46,17 @@ public class ProductController {
     }
 
     @PostMapping("/upload/{id}")
-    public String postUpload(@RequestParam("file") MultipartFile file, @PathVariable long id, RedirectAttributes redirectAttributes) {
-
+    public String postUpload(@RequestParam("file") MultipartFile file, @PathVariable long id, Model model) {
+        Optional<Product> product = jpaProductService.getProduct(id);
         if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
+            if(product.isPresent()){
+            model.addAttribute("productForPhoto", product.get());
+            model.addAttribute("message", "Apply after choosing image!");
             return "addProductImg";
+            }
+            return "exception-page";
         }
 
-        Optional<Product> product = jpaProductService.getProduct(id);
         if(product.isPresent()){
             Product product1 = product.get();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -75,7 +77,7 @@ public class ProductController {
         return "addProductView";
     }
 
-    @PostMapping("/add/")
+    @PostMapping("/add")
     public String addNewProductFromForm(@Valid Product product, BindingResult result) {
         if(result.hasErrors()){
             return "addProductView";
@@ -102,9 +104,7 @@ public class ProductController {
         if (product.isPresent()) {
             Product product1 = product.get();
             jpaProductService.deleteProduct(product1);
-        } else {
-            throw new EntityNotFoundException();
-        }
+        } else throw new EntityNotFoundException();
         return "redirect:/main";
     }
 
@@ -124,7 +124,7 @@ public class ProductController {
         model.addAttribute("product", product);
 
         byte[] img = product.getPhoto();
-        String image = "";
+        String image;
         if (img != null && img.length > 0) {
             image = Base64.getEncoder().encodeToString(img);
             model.addAttribute("photo", image);
