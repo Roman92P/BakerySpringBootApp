@@ -120,14 +120,16 @@ public class cashRegisterController {
         jpaBillService.addBill(bill);
         double sum = 0;
         for ( BillItem billItem : allItemsWithNullBill ){
-            sum +=billItem.getSoldProductPrice();
+//            sum +=billItem.getSoldProductPrice();
             billItem.setBill(bill);
             jpaBillItemService.updateBillItem(billItem);
             Stock stockProductByProductName = jpaStockService.getStockProductByProductName(billItem.getSoldProductName());
             stockProductByProductName.setProductQuantity(stockProductByProductName.getProductQuantity()-billItem.getSoldProductQuantity());
             jpaStockService.updateStock(stockProductByProductName);
         }
-        bill.setSumOfCustomerOrder(sum);
+//        bill.setSumOfCustomerOrder(sum);
+        double sum1 = allItemsWithNullBill.stream().mapToDouble(BillItem::getSoldProductPrice).sum();
+        bill.setSumOfCustomerOrder(sum1);
         jpaBillService.updateBill(bill);
 
 
