@@ -47,4 +47,6 @@ public class JpaBillItemService implements BillItemService {
     public List<BillItem> getAllItemsWithNullBill(){
        return billItemRepository.findAllByBillNull();
     }
+
+    public List<BillItem> getAllByBillId(Long billId){return  billItemRepository.findAllByBill_Id(billId);}
 }

@@ -55,4 +55,14 @@ public class HomeController {
     public List<Recipe> allExistRecipes (){
         return recipeService.getAllRecipes();
     }
+
+    @ModelAttribute(name = "zeroQuantityIngredients")
+    public List<Ingredient> allZeroIngredients(){
+        return ingredientService.getZeroQuantityIngredients();
+    }
+
+    @ModelAttribute(name = "almostEmptyIngredients")
+    public List<Ingredient> almostEmptyIngredients(){
+        return ingredientService.getAllWithMinimumQuantityIngredients();
+    }
 }

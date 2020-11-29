@@ -14,7 +14,7 @@ INSERT INTO recipe_item(ingredient_quantity, ingredients_id, recipe_id) VALUES (
 INSERT INTO recipe_item(ingredient_quantity, ingredients_id, recipe_id) VALUES (2.00,2,2);
 INSERT INTO recipe_item(ingredient_quantity, ingredients_id, recipe_id) VALUES (2.00,3,2);
 INSERT INTO products(name, price, recipe_id)VALUES ('Gruziński chleb żytni', 4.50, 1);
-INSERT INTO products(name, price, recipe_id)VALUES ('Chleb polski', 2.50, 1);
+INSERT INTO products(name, price, recipe_id)VALUES ('Chleb polski', 2.56, 1);
 INSERT INTO products(name, price, recipe_id)VALUES ('Chleb na maślance', 1.50, 1);
 INSERT INTO products(name, price, recipe_id)VALUES ('Chleb górski', 5.50, 1);
 INSERT INTO products(name, price, recipe_id)VALUES ('Chleb wrocławski', 8.55, 1);

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 
 @Entity
@@ -20,6 +21,7 @@ public class BillItem {
 
     private String soldProductName;
 
+    @Digits(integer = 8, fraction = 2)
     private double soldProductPrice;
 
     @Min(value = 1)
@@ -27,6 +29,10 @@ public class BillItem {
 
     @ManyToOne
     private Bill bill;
+
+    @OneToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     public BillItem() {
     }

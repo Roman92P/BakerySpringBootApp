@@ -40,4 +40,8 @@ public class JpaProductService implements ProductService {
     public void addProduct(Product product) {
         productRepository.save(product);
     }
+
+    public Optional<Product> getProductByProductName(String name){
+      return productRepository.findByNameEquals(name);
+    }
 }

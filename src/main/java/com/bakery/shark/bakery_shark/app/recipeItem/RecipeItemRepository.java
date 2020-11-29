@@ -17,7 +17,7 @@ public interface RecipeItemRepository extends JpaRepository<RecipeItem,Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM recipeItem WHERE ingredients_id=? and recipe_id=?",nativeQuery = true)
+    @Query(value = "DELETE FROM recipe_item WHERE ingredients_id=? and recipe_id=?",nativeQuery = true)
     void deleteRecipeItemByIngredientIdAndRecipeId(
             @Param("ingredient_id") Long ingredient,
             @Param("recipe_id") Long recipe

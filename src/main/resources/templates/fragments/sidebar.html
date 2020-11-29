@@ -15,7 +15,7 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-cog"></i>
-                <span>Funkcje</span>
+                <span>Functions</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
@@ -48,6 +48,10 @@
                         <h6 class="collapse-header">User:</h6>
                     <a class="collapse-item" th:href="@{/user/askForRights}">Ask for Admin rights</a>
                     </div>
+                    <div sec:authorize="hasRole('GUEST')">
+                        <h6 class="collapse-header">Guest:</h6>
+                        <a class="collapse-item" th:href="@{/user/askForUserRights}">Ask for User rights</a>
+                    </div>
                 </div>
             </div>
         </li>
@@ -57,7 +61,7 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Działy
+            Chapters
         </div>
 
         <!-- Nav Item - Pages Collapse Menu -->
@@ -81,7 +85,7 @@
         <li class="nav-item">
             <a class="nav-link" th:href="@{/main}">
                 <i class="fas fa-fw fa-chart-area"></i>
-                <span>Wyniki</span></a>
+                <span>Admin Dashboard</span></a>
         </li>
         </div>
         <!-- Divider -->
@@ -89,7 +93,7 @@
         <li class="nav-item">
             <a class="nav-link" th:href="@{/stock}">
                 <i class="fas fa-warehouse"></i>
-                <span>Magazyn</span></a>
+                <span>Warehouse(ready production)</span></a>
         </li>
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">

@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
         //for email end
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(false);
-        Role userRole = roleRepository.findByName("ROLE_USER");
+        Role userRole = roleRepository.findByName("ROLE_GUEST");
         user.setRoles(new HashSet<Role>(Collections.singletonList(userRole)));
         userRepository.save(user);
 

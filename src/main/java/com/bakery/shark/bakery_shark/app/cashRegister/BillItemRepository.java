@@ -11,4 +11,6 @@ public interface BillItemRepository extends JpaRepository<BillItem, Long> {
     List<BillItem> findAllByBillNull();
 
     BillItem findByBillNullAndAndSoldProductName(String soldProductName);
+
+    List<BillItem> findAllByBill_Id(Long billId);
 }

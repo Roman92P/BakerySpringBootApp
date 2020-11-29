@@ -9,15 +9,11 @@ import com.bakery.shark.bakery_shark.app.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalTime;
-import java.util.Collections;
-import java.util.HashSet;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Controller
@@ -35,7 +31,7 @@ public class AskForAdminRoleController {
     }
 
     @RequestMapping("/user/askForRights")
-    public String askForAdminRole(@AuthenticationPrincipal CurrentUser currentUser, Model model){
+    public String askForAdminRole(@AuthenticationPrincipal CurrentUser currentUser){
 
         String message = String.format("Dear Admin! \n User: %s \n Id: %d\n is asking for admin rights.\n If you accept - click link bellow.\n" +
                         "http://localhost:8080/admin/addAdminRights/%d" +
@@ -44,7 +40,7 @@ public class AskForAdminRoleController {
                 currentUser.getUser().getId(),
                 currentUser.getUser().getId());
 
-        mailSender.send("forcodeemailroman@gmail.com", "Admin Role request"+ LocalTime.now(), ""+message);
+        mailSender.send("forcodeemailroman@gmail.com", "Admin Role request"+ LocalDateTime.now(), ""+message);
 
         return "redirect:/";
     }

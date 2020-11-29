@@ -75,8 +75,11 @@ public class IngredientController {
     }
 
     @PostMapping("/warehouse/edit")
-    public String editWarehouseIngredient(@Valid Ingredient ingredient, BindingResult result){
+    public String editWarehouseIngredient(@Valid Ingredient ingredient, BindingResult result, Model model){
         if(result.hasErrors()){
+            List<Ingredient> allIngredients = ingredientService.getAllIngredients();
+            model.addAttribute("ingredients", allIngredients);
+            model.addAttribute("ingredient", new Ingredient());
             return "warehouseEditView";
         }
         ingredientService.updateIngredient(ingredient);

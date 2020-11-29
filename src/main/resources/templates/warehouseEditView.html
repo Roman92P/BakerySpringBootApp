@@ -44,30 +44,33 @@
                                         <div id="toDelIfAllNull">
                                             <div th:if="${ing.litr}!=0">
                                                 <label th:for="${ingredient.litr}">
-                                                    <p th:text="${ing.litr}"></p>
+                                                    <span th:text="${ing.litr}"> L</span>
+                                                    <br>
                                                     <input type="number" th:step="0.01" min="0" th:value="${ing.litr}"
-                                                           th:attr="name='litr'" placeholder="enter litr quantity">
-                                                    <input hidden th:value="${ing.weight}" th:attr="name='weight'">
-                                                    <input hidden th:value="${ing.quantity}" th:attr="name='quantity'">
+                                                           th:attr="name='litr'" placeholder="enter litr quantity"/>
+                                                    <input hidden th:value="${ing.weight}" th:attr="name='weight'"/>
+                                                    <input hidden th:value="${ing.quantity}" th:attr="name='quantity'"/>
                                                 </label>
                                             </div>
                                             <div th:if="${ing.quantity}!=0">
                                                 <label th:for="${ingredient.quantity}">
-                                                    <p th:text="${ing.quantity}"></p>
+                                                    <span th:text="${ing.quantity}"> Psc</span>
+                                                    <br>
                                                     <input type="number" min="0" th:step="0.01"
                                                            th:value="${ing.quantity}"
-                                                           th:attr="name='quantity'">
-                                                    <input hidden th:value="${ing.weight}" th:attr="name='weight'">
-                                                    <input hidden th:value="${ing.litr}" th:attr="name='litr'">
+                                                           th:attr="name='quantity'"/>
+                                                    <input hidden th:value="${ing.weight}" th:attr="name='weight'"/>
+                                                    <input hidden th:value="${ing.litr}" th:attr="name='litr'"/>
                                                 </label>
                                             </div>
                                             <div th:if="${ing.weight}!=0">
                                                 <label th:for="${ingredient.weight}">
-                                                    <p th:text="${ing.weight}"></p>
+                                                    <span th:text="${ing.weight}"> Kg</span>
+                                                    <br>
                                                     <input type="number" th:step="0.01" min="0" th:value="${ing.weight}"
-                                                           th:attr="name='weight'">
-                                                    <input hidden th:value="${ing.litr}" th:attr="name='litr'">
-                                                    <input hidden th:value="${ing.quantity}" th:attr="name='quantity'">
+                                                           th:attr="name='weight'"/>
+                                                    <input hidden th:value="${ing.litr}" th:attr="name='litr'"/>
+                                                    <input hidden th:value="${ing.quantity}" th:attr="name='quantity'"/>
                                                 </label>
                                             </div>
                                         </div>
@@ -143,12 +146,6 @@
                                             </div>
                                         </div>
                                         <input type="submit" value="Edit"/>
-                                        <br>
-                                        <ul th:if="${#fields.hasErrors('*')}">
-                                            <li class="text-danger" th:each="err : ${#fields.errors('*')}"
-                                                th:text="${err}">Input is incorrect
-                                            </li>
-                                        </ul>
                                     </form>
                                 <td>
                             </tr>
