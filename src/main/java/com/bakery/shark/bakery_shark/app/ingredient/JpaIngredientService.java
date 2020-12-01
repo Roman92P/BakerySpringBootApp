@@ -70,4 +70,8 @@ public class JpaIngredientService implements IngredientService {
 
         return almostEmptyIngredientList.stream().distinct().collect(Collectors.toList());
     }
+
+    public Integer getCountOfEmptyIngredients(){
+       return ingredientRepository.getNumberOfEmptyIngredients();
+    }
 }

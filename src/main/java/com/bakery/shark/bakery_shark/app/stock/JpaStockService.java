@@ -77,4 +77,8 @@ public class JpaStockService implements StockService {
     public Stock getStockProductByProductName(String productName) {
         return stockRepository.findFirstByProductName(productName);
     }
+
+    public Integer getAllStockProductQuantity(){
+        return stockRepository.getSumOfStockProductQuantity();
+    }
 }

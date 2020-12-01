@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,11 +32,8 @@ public class BillController {
 
     private final JavaMailSender javaMailSender;
 
-
     @RequestMapping(value = "/cashRegister/bill/complete", method = RequestMethod.POST)
-    public String reciveCompleteBill(@RequestParam String srcImg, @AuthenticationPrincipal CurrentUser currentUser) {
-
-
+    public String reciveCompleteBill(@RequestParam String srcImg, @AuthenticationPrincipal CurrentUser currentUser, Model model) {
 
         String[] arr = srcImg.split(",");
         String targetImgSrc=arr[1];
@@ -66,11 +64,8 @@ public class BillController {
             e.printStackTrace();
         }
 
+        model.addAttribute("successMesage","Mail successfully sent :)");
 
-
-
-//        mailSender.send(message);
-
-        return "redirect:/cashRegister";
+        return "billView";
     }
 }

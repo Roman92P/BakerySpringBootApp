@@ -60,4 +60,8 @@ public class JpaBillService implements BillService {
         billById.setUser(userService.findByUserId(userId).orElseThrow(EntityNotFoundException::new));
         billRepository.save(billById);
     }
+
+    public Double getSumOfTodayOrders() {
+        return billRepository.getSumOfTodaySold();
+    }
 }

@@ -13,10 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +30,7 @@ import java.util.List;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/cashRegister")
+@SessionAttributes("orderSession")
 public class CashRegisterController {
 
     private final Logger logger = LoggerFactory.getLogger(CashRegisterController.class);
@@ -46,23 +45,53 @@ public class CashRegisterController {
     private final JpaProductService jpaProductService;
     private final UserService userService;
 
-    @RequestMapping
-    public String showCashRegister(Model model, HttpServletRequest request) {
-
-        HttpSession session = request.getSession();
-        if (session.getAttribute("workStockQuantity") == null) {
-            List<Stock> allStock = jpaStockService.getAllStock();
-            for ( Stock s : allStock ) {
-                WorkStockQuantity workStockQuantity = new WorkStockQuantity();
-                workStockQuantity.setWorkStockProductName(s.getProductName());
-                workStockQuantity.setWorkStockProductQuantity(s.getProductQuantity());
-                jpaWorkStockProductQuantityService.addWorkStockQuantity(workStockQuantity);
-            }
-//            List<WorkStockQuantity> allWorkStock = jpaWorkStockProductQuantityService.getAllWorkStock();
-            session.setAttribute("workStockQuantity", "workStock");
-        }
-
+    //Reset Orde
+    @RequestMapping("/resetOrder")
+    public String deleteWholeOrder() {
         List<BillItem> allItemsWithNullBill = jpaBillItemService.getAllItemsWithNullBill();
+        allItemsWithNullBill.stream().forEach(jpaBillItemService::deleteBillItem);
+        return "redirect:/cashRegister";
+    }
+
+    //Delete WorkItem
+    @RequestMapping("/deleteWorkItem/{id}")
+    public String deleteWorkItem(@PathVariable long id) {
+        BillItem billItem = jpaBillItemService.getBillItem(id).orElseThrow(EntityNotFoundException::new);
+        String name = billItem.getProduct().getName();
+        List<WorkStockQuantity> allWorkStock = jpaWorkStockProductQuantityService.getAllWorkStock();
+        for(WorkStockQuantity w: allWorkStock){
+            if(name.equals(w.getWorkStockProductName())){
+                w.setWorkStockProductQuantity(w.getWorkStockProductQuantity()+billItem.getSoldProductQuantity());
+                jpaWorkStockProductQuantityService.updateWorkStockQuantity(w);
+            }
+        }
+        jpaBillItemService.deleteBillItem(billItem);
+        return "redirect:/cashRegister";
+    }
+
+//    @PostMapping("/editWorkItem")
+//    public String editWorkItem(@Valid BillItem billItem, BindingResult bindingResult, RedirectAttributes  redirectAttributes){
+//        if(bindingResult.hasErrors()){
+//            redirectAttributes.addFlashAttribute("editBillItemError","Minimum quantity is 1");
+//            return "redirect:/cashRegister";
+//        }
+//        jpaBillItemService.updateBillItem(billItem);
+//        return "redirect:/cashRegister";
+//    }
+
+//    @ModelAttribute("billItemToUpdate")
+//    public BillItem giveBillItemToUpdate(){
+//        return new BillItem();
+//    }
+
+    // First Cashregister View
+    @RequestMapping
+    public String showCashRegister(Model model, HttpServletRequest request, HttpSession session,SessionStatus status) {
+        List<BillItem> allItemsWithNullBill = jpaBillItemService.getAllItemsWithNullBill();
+        if(allItemsWithNullBill.size()==0){
+            logger.error("Session status in 1 view: "+ status.isComplete());
+            status.setComplete();
+        }
         model.addAttribute("allItemsWithNullBill", allItemsWithNullBill);
         return "CashRegisterView";
     }
@@ -78,6 +107,7 @@ public class CashRegisterController {
         return jpaStockService.getAllStock();
     }
 
+    //Add product quantity
     @RequestMapping("/createSoldItem/{id}")
     public String createSoldItem(@PathVariable long id, Model model) {
         Stock stock = jpaStockService.getStockProduct(id).orElseThrow(EntityNotFoundException::new);
@@ -89,10 +119,21 @@ public class CashRegisterController {
     }
 
     @PostMapping("/addBillItem")
-    public String addBillItem(@Valid BillItem billItem, BindingResult result, Model model, HttpServletRequest request) {
-
+    public String addBillItem(@Valid BillItem billItem, BindingResult result, Model model, HttpServletRequest request, SessionStatus status) {
         if (result.hasErrors()) {
             return "addQuantityCashView";
+        }
+
+        if(model.getAttribute("orderSession")==null){
+            jpaWorkStockProductQuantityService.getAllWorkStock().stream().forEach(jpaWorkStockProductQuantityService::deleteWorkStockProductQuantity);
+            List<Stock> allStock = jpaStockService.getAllStock();
+            for ( Stock s : allStock ) {
+                WorkStockQuantity workStockQuantity = new WorkStockQuantity();
+                workStockQuantity.setWorkStockProductName(s.getProductName());
+                workStockQuantity.setWorkStockProductQuantity(s.getProductQuantity());
+                jpaWorkStockProductQuantityService.addWorkStockQuantity(workStockQuantity);
+                model.addAttribute("orderSession","yes");
+            }
         }
 
         String soldProductName = billItem.getSoldProductName();
@@ -102,21 +143,18 @@ public class CashRegisterController {
 
         Stock stockProductByProductName = jpaStockService.getStockProductByProductName(billItem.getSoldProductName());
 
-        HttpSession session = request.getSession();
-        if (session.getAttribute("workStockQuantity") != null) {
-            List<WorkStockQuantity> allWorkStock = jpaWorkStockProductQuantityService.getAllWorkStock();
-            for ( WorkStockQuantity wsq : allWorkStock ) {
-                if (soldProductName.equals(wsq.getWorkStockProductName())) {
-                    if (billItem.getSoldProductQuantity() > wsq.getWorkStockProductQuantity()) {
-                        model.addAttribute("alertProductBillName", billItem.getSoldProductName());
-                        model.addAttribute("alertProductBillQuantity", billItem.getSoldProductQuantity());
-                        model.addAttribute("alertProductId", stockProductByProductName.getId());
-                        return "addQuantityCashView";
-                    }
-                    WorkStockQuantity workStockQuantityByProductName = jpaWorkStockProductQuantityService.getWorkStockQuantityByProductName(soldProductName);
-                    workStockQuantityByProductName.setWorkStockProductQuantity(workStockQuantityByProductName.getWorkStockProductQuantity() - billItem.getSoldProductQuantity());
-                    jpaWorkStockProductQuantityService.updateWorkStockQuantity(workStockQuantityByProductName);
+        List<WorkStockQuantity> allWorkStock = jpaWorkStockProductQuantityService.getAllWorkStock();
+        for ( WorkStockQuantity wsq : allWorkStock ) {
+            if (soldProductName.equals(wsq.getWorkStockProductName())) {
+                if (billItem.getSoldProductQuantity() > wsq.getWorkStockProductQuantity()) {
+                    model.addAttribute("alertProductBillName", billItem.getSoldProductName());
+                    model.addAttribute("alertProductBillQuantity", billItem.getSoldProductQuantity());
+                    model.addAttribute("alertProductId", stockProductByProductName.getId());
+                    return "addQuantityCashView";
                 }
+                WorkStockQuantity workStockQuantityByProductName = jpaWorkStockProductQuantityService.getWorkStockQuantityByProductName(soldProductName);
+                workStockQuantityByProductName.setWorkStockProductQuantity(workStockQuantityByProductName.getWorkStockProductQuantity() - billItem.getSoldProductQuantity());
+                jpaWorkStockProductQuantityService.updateWorkStockQuantity(workStockQuantityByProductName);
             }
         }
         billItem.setProduct(product);
@@ -124,8 +162,9 @@ public class CashRegisterController {
         return "redirect:/cashRegister";
     }
 
+    // Finish order
     @RequestMapping("/finishOrder")
-    public String finalizeCustomerOrder(HttpServletRequest request, Principal principal) {
+    public String finalizeCustomerOrder(HttpSession session, Principal principal, SessionStatus status) {
         List<BillItem> allItemsWithNullBill = jpaBillItemService.getAllItemsWithNullBill();
         Bill bill = new Bill();
         jpaBillService.addBill(bill);
@@ -135,22 +174,19 @@ public class CashRegisterController {
             stockProductByProductName.setProductQuantity(stockProductByProductName.getProductQuantity() - billItem.getSoldProductQuantity());
             jpaStockService.updateStock(stockProductByProductName);
         }
-//        bill.setSumOfCustomerOrder(sum);
         double sum1 = allItemsWithNullBill.stream().mapToDouble(item -> item.getSoldProductPrice() * (item.getSoldProductQuantity())).sum();
         double roundedSum = BigDecimal.valueOf(sum1).setScale(2, RoundingMode.HALF_UP).doubleValue();
         logger.error("Sum of basket: " + sum1);
         bill.setSumOfCustomerOrder(roundedSum);
         jpaBillService.updateBill(bill);
 
-
-        HttpSession session = request.getSession();
-        if (session.getAttribute("workStockQuantity") != null) {
-            List<WorkStockQuantity> allWorkStock = jpaWorkStockProductQuantityService.getAllWorkStock();
-            for ( WorkStockQuantity w : allWorkStock ) {
-                jpaWorkStockProductQuantityService.deleteWorkStockProductQuantity(w);
-            }
-            session.removeAttribute("workStockQuantity");
+        List<WorkStockQuantity> allWorkStock = jpaWorkStockProductQuantityService.getAllWorkStock();
+        for ( WorkStockQuantity w : allWorkStock ) {
+            jpaWorkStockProductQuantityService.deleteWorkStockProductQuantity(w);
         }
+
+        status.setComplete();
+
         logger.error("bill id after set bill to bileItems " + bill.getId());
 
         jpaBillService.createTextBill(bill.getId(), userService.findByUserName(principal.getName()).getId());
@@ -158,6 +194,7 @@ public class CashRegisterController {
         return "redirect:/cashRegister/showBill/" + bill.getId();
     }
 
+    //Show new bill
     @RequestMapping("/showBill/{id}")
     public String showOrderBill(@PathVariable Long id, Model model, Principal principal) {
         model.addAttribute("billItems", jpaBillItemService.getAllByBillId(id));

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -39,5 +40,17 @@ public class AdminController {
         userService.addNewUserByAdmin(user);
         model.addAttribute("resultOfAdding", "You've add new user");
         return "redirect:/admin/createUser";
+    }
+
+    @PostMapping("/deactivateUser/{id}")
+    public String deactivateUser(@PathVariable long id){
+
+        return "redirect:/bakery/dashboard";
+    }
+
+    @PostMapping("/activateUser/{id}")
+    public String activateUser(@PathVariable long id){
+
+        return "redirect:/bakery/dashboard";
     }
 }

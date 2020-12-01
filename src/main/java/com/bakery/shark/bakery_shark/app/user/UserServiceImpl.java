@@ -10,10 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -74,6 +71,16 @@ public class UserServiceImpl implements UserService {
             mailSender.send(user.getEmail(), "From Admin Bakery Manager", message);
         }
     }
+
+    @Override
+    public Set<User> getAllActiveUsers() {
+        return userRepository.findAllByActiveTrue();
+    }
+
+//    @Override
+//    public Set<User> getAllActiveUsers() {
+//        return userRepository.findAllByActiveTrue();
+//    }
 
     @Override
     public boolean saveUser(User user) {

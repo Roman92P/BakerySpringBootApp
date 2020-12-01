@@ -25,79 +25,89 @@
             <div th:insert="fragments/topbar::#topbar"></div>
             <!--        Content-->
             <div class="container-fluid">
+                <div th:if="${successMesage}">
+                    <h5><span class="text-uppercase text-success" th:text="${successMesage}"></span></h5>
+                </div>
                 <div class="card shadow-sm" style="width: 18rem;">
                     <div class="card-body">
-                        <div id="photo" style="border: 4px solid green;padding: 4px;">
-                            <h5 class="card-title">Bill with ID: <span th:text="${thisBill.id}"></span></h5>
-                            <h6 class="card-subtitle mb-2 text-muted text-center">Summary of Customer order</h6>
-                            <div class="row">
-                                <div class="col-3 text-xs">
-                                    <span>Product</span>
+                        <div th:if="${successMesage}==null">
+                            <div id="photo" style="border: 4px solid green;padding: 4px;">
+                                <h5 class="card-title">Bill with ID: <span th:text="${thisBill.id}"></span></h5>
+                                <h6 class="card-subtitle mb-2 text-muted text-center">Summary of Customer order</h6>
+                                <div class="row">
+                                    <div class="col-3 text-xs">
+                                        <span>Product</span>
+                                    </div>
+                                    <div class="col-3 text-xs">
+                                        <span>Price</span>
+                                    </div>
+                                    <div class="col-3 text-xs">
+                                        <span>Quantity</span>
+                                    </div>
+                                    <div class="col-3 text-xs">
+                                        <span>Sum</span>
+                                    </div>
                                 </div>
-                                <div class="col-3 text-xs">
-                                    <span>Price</span>
-                                </div>
-                                <div class="col-3 text-xs">
-                                    <span>Quantity</span>
-                                </div>
-                                <div class="col-3 text-xs">
-                                    <span>Sum</span>
-                                </div>
-                            </div>
-                            <hr class="solid">
+                                <hr class="solid">
 
-                            <div th:each="item : ${billItems}">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <p class="card-text"><span th:text="${item.product.name}"
-                                                                   class="text-sm"></span>
-                                        </p>
-                                    </div>
-                                    <div class="col-3">
-                                        <p class="card-text"><span th:text="${item.soldProductPrice}"></span></p>
-                                    </div>
-                                    <div class="col-3">
-                                        <p class="card-text"><span th:text="${item.soldProductQuantity}"></span></p>
-                                    </div>
-                                    <div class="col-3">
-                                        <p class="card-text"><span th:text="${thisBill.getRealSumOfOrder()}"></span></p>
+                                <div th:each="item : ${billItems}">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <p class="card-text"><span th:text="${item.product.name}"
+                                                                       class="text-sm"></span>
+                                            </p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="card-text"><span th:text="${item.soldProductPrice}"></span></p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="card-text"><span th:text="${item.soldProductQuantity}"></span></p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="card-text"><span th:text="${thisBill.getRealSumOfOrder()}"></span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr class="solid">
-                            <div class="card-footer">
-                                <div class="row">
-                                    <div class="col-6 text-xs">
-                                        <span>Paragon with date and time</span><span
-                                            th:text="${#temporals.formatISO(currentDateTime)}"></span>
-                                    </div>
-                                    <div class="col-6 text-xs">
-                                        <span th:text="${user}"></span>
+                                <hr class="solid">
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-6 text-xs">
+                                            <span>Paragon with date and time</span><span
+                                                th:text="${#temporals.formatISO(currentDateTime)}"></span>
+                                        </div>
+                                        <div class="col-6 text-xs">
+                                            <span th:text="${user}"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <hr class="solid">
-                        <a th:href="@{/kitchen}" class="btn btn-primary shadow-sm mb-2" role="button">Go to
-                            kitchen</a>
-                        <a th:href="@{/cashRegister}" class="btn btn-dark shadow-sm mb-2" role="button">Go to Cash
-                            register</a>
-                        <div sec:authorize="hasRole('ADMIN')">
-                            <a th:href="@{/main}" role="button" class="btn btn-dark shadow-sm">Got o main</a>
+                        <div th:if="${successMesage}">
+                            <a th:href="@{/kitchen}" id="kitchenButton"
+                               class="btn btn-primary shadow-sm mb-2" role="button">Go to
+                                kitchen</a>
+                            <a th:href="@{/cashRegister}" id="cashButton"
+                               class="btn btn-dark shadow-sm mb-2" role="button">Go to Cash
+                                register</a>
+                            <div sec:authorize="hasRole('ADMIN')">
+                                <a th:href="@{/main}" id="mainBtn" role="button" class="btn btn-dark shadow-sm">Got o
+                                    main</a>
+                            </div>
                         </div>
-                        <button id="takeShotBtn" class="btn btn-success">
-                            Confirm bill
-                        </button>
-                        <form action="#" method="post" th:object="${billImg}" th:action="@{/cashRegister/bill/complete}">
+                        <div th:if="${successMesage}==null">
+                            <button id="takeShotBtn" class="btn btn-success">
+                                Confirm bill
+                            </button>
+                        </div>
+                        <form action="#" method="post" th:object="${billImg}"
+                              th:action="@{/cashRegister/bill/complete}">
                             <input id="hideInput" hidden th:attr="name='srcImg'">
-                            <button id="hideSubmit" type="submit">Send</button>
+                            <button id="hideSubmit" style="display: none" type="submit" class="btn btn-success">Send
+                            </button>
                         </form>
                     </div>
-                </div>
-                <div class="row">
-                    <h1>Screenshot:</h1>
-                    <div id="output"></div>
-
                 </div>
             </div>
             <!--        End of content-->

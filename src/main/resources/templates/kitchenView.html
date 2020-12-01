@@ -45,6 +45,13 @@
             </div>
             <!--        Content-->
             <div class="container-fluid h-50">
+                <div th:if="${editQuantityError}!=null">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4><span class="text-danger" th:text="${editQuantityError}"></span></h4>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col">
                         <div class="row">
@@ -60,7 +67,7 @@
                             <div class="card shadow-sm">
                                 <div class="card-header">
                                      <h6 class="m-0 font-weight-bold text-primary">You can't produce <span
-                                         th:text="${alertProductName}"></span>
+                                             th:text="${alertProductName}"></span>
                                          in quantity of <span th:text="${alertQuantity}"></span>. Bellow ingredients witch warehouse quantity is not enought.</h6>
                                 </div>
                                     <table class="table-hover table">
@@ -77,12 +84,14 @@
                                     <tfoot>
                                     <tr>
                                         <td>
-                                            <a role="button" class="btn-primary btn-primary shadow-sm" th:href="@{/main}">Send info to admin</a>
+                                            <a role="button" class="btn-primary btn-primary shadow-sm"
+                                               th:href="@{/main}">Send info to admin</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <a role="button" class="btn-primary btn-primary shadow-sm" th:href="@{/kitchen}">Cancel</a>
+                                            <a role="button" class="btn-primary btn-primary shadow-sm"
+                                               th:href="@{/kitchen}">Cancel</a>
                                         </td>
                                     </tr>
                                     </tfoot>
@@ -124,23 +133,63 @@
                                 <td th:text="${item.product.name}"></td>
                                 <td th:text="${item.quantity}"></td>
                                 <td>
-                                    <a th:href="@{#}">Edit</a>
+                                    <a th:href="@{/kitchen/deleteWorkItem/{id}(id=${item.id})}" class="btn btn-dark"
+                                       role="button">Remove</a>
                                     <br>
-                                    <a th:href="@{#}">Remove</a>
+                                    <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#editModal">
+                                        Edit
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editModal">Edit item with ID:<span th:text="${item.id}"></span></h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="#" method="post" th:object="${manufactureItemToEdit}"
+                                                          th:action="@{/kitchen/editWorkItem/{cquantity}(cquantity=${item.quantity})}">
+                                                        <input hidden th:attr="name='id'" th:value="${item.id}">
+                                                        <input hidden th:attr="name='product'" th:value="${item.product.id}">
+                                                        <label th:for="${item.quantity}">
+                                                            <input type="number" th:field="${manufactureItemToEdit.quantity}" th:default="1"/>
+                                                        </label>
+                                                        <input type="submit" class="btn-success"/>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </td>
                             </tr>
                             </tbody>
                             <tfoot th:id="endOrder">
                             <tr>
                                 <td>
-                                    <a th:href="@{/kitchen/finalizeOrder}" class="btn-lg btn-primary"
-                                       style="text-decoration: none">Book work order</a>
+                                    <div class="row">
+                                        <a th:href="@{/kitchen/finalizeOrder}" class="btn-lg btn-primary"
+                                           style="text-decoration: none">Book work order</a>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <a th:href="@{/kitchen/deleteWorkOrder}" class="btn-lg btn-primary"
-                                       style="text-decoration: none">Reset work order</a>
+                                    <div class="row">
+                                        <a th:href="@{/kitchen/deleteWorkOrder}" class="btn-lg btn-primary"
+                                           style="text-decoration: none">Reset work order</a>
+                                    </div>
                                 </td>
                             </tr>
                             </tfoot>

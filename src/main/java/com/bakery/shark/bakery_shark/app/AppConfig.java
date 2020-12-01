@@ -27,7 +27,6 @@ import java.util.Locale;
 @EnableJpaRepositories(basePackages = "com.bakery.shark.bakery_shark")
 public class AppConfig implements WebMvcConfigurer {
 
-
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("home");
@@ -45,6 +44,7 @@ public class AppConfig implements WebMvcConfigurer {
 
         public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:/static/");
     }
 
     @Override

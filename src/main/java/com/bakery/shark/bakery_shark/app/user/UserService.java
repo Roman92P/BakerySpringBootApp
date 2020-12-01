@@ -4,6 +4,7 @@ import com.bakery.shark.bakery_shark.app.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public interface UserService {
@@ -15,4 +16,6 @@ public interface UserService {
     Optional<User> findByUserId(Long id);
     boolean updateUser(User user);
     void addNewUserByAdmin(User user);
+
+    Set<User> getAllActiveUsers();
 }

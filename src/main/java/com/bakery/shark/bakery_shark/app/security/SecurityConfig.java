@@ -34,10 +34,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/favicon.ico").permitAll()
                 .antMatchers("/", "/user/create-user","/activate/*", "/offer").permitAll()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/main").hasAnyRole("ADMIN")
-                .antMatchers("bakery/ingredients").hasAnyRole("ADMIN")
+                .antMatchers("/bakery/ingredients").hasAnyRole("ADMIN")
+                .antMatchers("/bakery/dashboard").hasAnyRole("ADMIN")
                 .antMatchers("/kitchen/**").hasAnyRole("ADMIN","USER")
                 .antMatchers("/cashRegister/**").hasAnyRole("ADMIN","USER")
                 .antMatchers("/ingredient/**").hasAnyRole("ADMIN")

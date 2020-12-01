@@ -27,6 +27,15 @@
             <div th:insert="fragments/topbar::#topbar"></div>
             <!--        Content-->
             <div class="container-fluid h-50">
+
+                <div th:if="${editBillItemError}!=null">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4><span class="text-danger" th:text="${editBillItemError}"></span></h4>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row mb-2">
                     <div class="col-auto">
                         <div class="dropdown">
@@ -84,16 +93,19 @@
                                 <td th:text="${item.soldProductPrice}"></td>
                                 <td th:text="${item.soldProductQuantity}"></td>
                                 <td>
-                                    <a th:href="@{#}">Edit</a>
-                                    <br>
-                                    <a th:href="@{#}">Remove</a>
+                                    <a class="btn btn-dark" role="button" th:href="@{/cashRegister/deleteWorkItem/{id}(id=${item.id})}">Remove</a>
                                 </td>
                             </tr>
                             </tbody>
                             <tfoot th:id="endOrder">
                             <tr >
                                 <td th:colspan="3">
+                                    <div class="row">
                                     <a th:href="@{/cashRegister/finishOrder}" class="btn-lg btn-primary" style="text-decoration: none" >Complete bill</a>
+                                    </div>
+                                    <div class="row">
+                                        <a th:href="@{/cashRegister/resetOrder}" class="btn-lg btn-danger mt-1" style="text-decoration: none" >Reset bill</a>
+                                    </div>
                                 </td>
                             </tr>
                             </tfoot>
