@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ProducedRepository extends JpaRepository<Produced, Long> {
 
-    @Query(value = "SELECT SUM(product_stock_quantity) FROM produced where CURRENT_DATE", nativeQuery = true)
+    @Query(value = "SELECT SUM(product_stock_quantity) FROM produced where DATE (created_on) = CURDATE()", nativeQuery = true)
     Integer getSumToday();
 }

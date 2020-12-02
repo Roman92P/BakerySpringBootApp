@@ -73,14 +73,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<User> getAllActiveUsers() {
-        return userRepository.findAllByActiveTrue();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
-//    @Override
-//    public Set<User> getAllActiveUsers() {
-//        return userRepository.findAllByActiveTrue();
-//    }
 
     @Override
     public boolean saveUser(User user) {

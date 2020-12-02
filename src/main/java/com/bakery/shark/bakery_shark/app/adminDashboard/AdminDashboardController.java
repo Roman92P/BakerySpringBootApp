@@ -11,8 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -66,7 +67,13 @@ public class AdminDashboardController {
     }
 
     @ModelAttribute("allActiveUsers")
-    public Set<User>allActUsers(){
-        return userService.getAllActiveUsers();
+    public List<User> allActUsers(){
+        List<User> allUsers = userService.getAllUsers();
+        return allUsers.stream().filter(user -> !user.getFirstName().equals("Admin")).collect(Collectors.toList());
+    }
+
+    @ModelAttribute("soldsInCurrentMonth")
+    public List<Object[]> getSoldsInCurrentMonth(){
+        return jpaBillService.getBillsForCurrentMonth();
     }
 }

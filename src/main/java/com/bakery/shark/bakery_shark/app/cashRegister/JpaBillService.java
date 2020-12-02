@@ -64,4 +64,16 @@ public class JpaBillService implements BillService {
     public Double getSumOfTodayOrders() {
         return billRepository.getSumOfTodaySold();
     }
+
+    public List<Object[]> getBillsForCurrentMonth(){
+        return billRepository.getBillsFromCurrentMonth();
+    }
+
+    public List<Object[]> getBillsForPreviousMonth(){
+        return billRepository.getBillsFromPreviousMonth();
+    }
+
+    public List<Object[]> getBillsForCertainPeriod(String startDate, String endDate){
+       return billRepository.getBillsFromCustomPeriod(startDate,endDate);
+    }
 }

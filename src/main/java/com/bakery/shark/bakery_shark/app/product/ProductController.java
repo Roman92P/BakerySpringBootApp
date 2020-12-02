@@ -32,7 +32,6 @@ public class ProductController {
     @Autowired
     Validator validator;
 
-    @Autowired
     private final JpaProductService jpaProductService;
     private final JpaIngredientService ingredientService;
     private final JpaRecipeService recipeService;

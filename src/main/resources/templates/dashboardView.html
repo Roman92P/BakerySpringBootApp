@@ -9,6 +9,8 @@
           rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->
     <link href="/static/css/sb-admin-2.css" rel="stylesheet">
+    <!--    cancas for chart-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 </head>
 <body id="page-top">
 
@@ -106,9 +108,10 @@
                         </div>
                     </div>
                 </div>
+                <!--                New row content-->
                 <div class="row">
-                    <div class="col-6 mt-2 mb-2">
-                        <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="col-xs-12 col-sm-3 col-md-4 col-lg-6 mt-2 mb-2 ">
+                        <div class="card border-left-primary shadow h-100 py-2">
                             <div class="card-header m-2">
                                 <i class="fas fa-users"></i>
                                 <div class="text-xs font-weight-bold text-black-50 text-uppercase mb-1">Manage your
@@ -116,32 +119,72 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="row no-gutters align-items-center">
+                                <li class="row no-gutters align-items-center">
                                     <ul class="list-group container-fluid" th:each="user:${allActiveUsers}">
-                                        <div class="col">
-                                            <li class="list-group-item">Name: <span th:text="${user.firstName}"></span>
-                                                Surname: <span th:text="${user.lastName}"></span></li>
-                                        </div>
-                                        <div class="col">
-                                            <a th:href="@{/admin/deactivateUser/{id}(id=${user.id})}" class="btn btn-dark shadow-sm"
+                                        <li class="list-group-item">Name: <span th:text="${user.firstName}"
+                                                                                class="text-uppercase text-info mr-2"></span>
+                                            Surname: <span class="text-uppercase text-info mr-2"
+                                                           th:text="${user.lastName}"></span>
+                                            Is active: <span class="text-uppercase text-info"
+                                                             th:text="${user.enabled}"></span></li>
+                                        <li class="list-group-item bg-gradient-dark">
+                                            <a th:href="@{/admin/deactivateUser/{id}(id=${user.id})}"
+                                               class="btn bt btn-dark shadow-sm"
                                                role="button">Deactivate</a>
-                                        </div>
-                                        <div class="col">
-                                            <a th:href="@{/admin/activateUser/{id}(id=${user.id})}" class="btn btn-primary shadow-sm"
+                                            <a th:href="@{/admin/activateUser/{id}(id=${user.id})}"
+                                               class="btn btn-primary shadow-sm"
                                                role="button">Activate</a>
-                                        </div>
+                                        </li>
                                     </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-9 col-md-8 col-lg-6 mt-2 mb-2">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-header m-2">
+                                <i class="fas fa-users"></i>
+                                <div class="text-xs font-weight-bold text-black-50 text-uppercase mb-1">Sold history
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <select id="soldPeriod">
+                                        <option>Select period</option>
+                                        <option value="cm">Current month</option>
+                                        <option value="pm">Previous month</option>
+                                        <option value="cd">Custom date</option>
+                                    </select>
+                                </div>
+                                <div class="row mt-2">
+                                    <div  class="col-5">
+                                        <input id="beginDate" type="date" class="mr2" style="display: none">
+                                    </div>
+                                    <div  class="col-5">
+                                        <input id="endDate" type="date" class="mr2" style="display: none">
+                                    </div>
+                                    <div  class="col-2">
+                                        <a style="display: none" id="customBtn" role="button" class="btn btn-primary text-light"
+                                        >Submit</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <canvas id="usersSoldHistory">
+                                    </canvas>
+                                    <canvas id="usersSoldHistoryLm">
+                                    </canvas>
+                                    <canvas id="usersSoldHistoryCm">
+                                    </canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 mt-2 mb-2">
-                    </div>
                 </div>
+                <!--                End od second row-->
             </div>
-            <!--        End of content-->
         </div>
+        <!--        End of content-->
     </div>
+</div>
 </div>
 <div th:insert="fragments/footer::#footer"></div>
 <!-- End of Page Wrapper -->
@@ -162,5 +205,6 @@
 <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
 <!-- Custom scripts for all pages-->
 <script src="/static/js/sb-admin-2.min.js"></script>
+<script src="/static/js/dashboard.js"></script>
 </body>
 </html>

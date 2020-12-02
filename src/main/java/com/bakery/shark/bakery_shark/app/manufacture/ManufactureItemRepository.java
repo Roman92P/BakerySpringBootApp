@@ -16,4 +16,5 @@ public interface ManufactureItemRepository extends JpaRepository<ManufactureItem
 
 
 
+
 }
