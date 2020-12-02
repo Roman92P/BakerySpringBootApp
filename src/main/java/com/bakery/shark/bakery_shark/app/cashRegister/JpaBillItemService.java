@@ -49,4 +49,8 @@ public class JpaBillItemService implements BillItemService {
     }
 
     public List<BillItem> getAllByBillId(Long billId){return  billItemRepository.findAllByBill_Id(billId);}
+
+    public List<Object[]> getSoldNamesAndQuantitiesForPeriod(String year, String month){
+       return billItemRepository.getSoldProductsBetweenDates(year, month);
+    }
 }

@@ -1,7 +1,9 @@
 package com.bakery.shark.bakery_shark.app.adminDashboard;
 
+import com.bakery.shark.bakery_shark.app.cashRegister.JpaBillItemService;
 import com.bakery.shark.bakery_shark.app.cashRegister.JpaBillService;
 import com.bakery.shark.bakery_shark.app.model.BillDto;
+import com.bakery.shark.bakery_shark.app.model.BillItemDTO;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import java.util.List;
 public class AdminDashboardRestController {
 
     private final JpaBillService jpaBillService;
+    private final JpaBillItemService jpaBillItemService;
     private final Gson gson;
 
     @GetMapping(value = "/soldCurrentMonth",produces ="text/plain;charset=UTF-8")
@@ -61,6 +64,19 @@ public class AdminDashboardRestController {
             bills.add(billDto);
         }
         return gson.toJson(bills);
+    }
+
+    @GetMapping(value = "/mostPopularProducts/{year}/{month}", produces = "text/plain;charset=UTF-8")
+    public String getMostPopularProductByDate(@PathVariable String year, @PathVariable String month){
+        List<Object[]> soldNamesAndQuantitiesForPeriod = jpaBillItemService.getSoldNamesAndQuantitiesForPeriod(year, month);
+        List<BillItemDTO> billItemDTOList = new ArrayList<>();
+        for(Object[] billItem : soldNamesAndQuantitiesForPeriod){
+            BillItemDTO billItemDTO = new BillItemDTO();
+            billItemDTO.setSoldProductName((String)billItem[0]);
+            billItemDTO.setSoldProductQuantity((Integer)billItem[1]);
+            billItemDTOList.add(billItemDTO);
+        }
+        return gson.toJson(billItemDTOList);
     }
 
 }
