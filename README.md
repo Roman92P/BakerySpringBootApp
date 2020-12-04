@@ -11,7 +11,7 @@ After that just track you manufacture and sales processes.
 * Simply create products by using added supplies before
 * ability to simply note every manufacture and sale process (kitchen and cash register view)
 * Simply set rolls for your other users (guest can become user, user can become Admin. Send requests to Admin through email)
-* Receive all your bills on email
+* Receive all your bills on email box
 * Track your results in dashboard (today sales, today produced items, supplies which has to be refiled, lost products (app was developed for bakery, and bakery can't store produced items more then one day))
 * Upload images for products so every guest can view your offer
 # Technologies
