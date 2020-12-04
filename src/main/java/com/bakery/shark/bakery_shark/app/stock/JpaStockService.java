@@ -81,4 +81,6 @@ public class JpaStockService implements StockService {
     public Integer getAllStockProductQuantity(){
         return stockRepository.getSumOfStockProductQuantity();
     }
+
+    public Double getSumOfAllStockProducts(){return  stockRepository.getSumOfStockProductCost();}
 }

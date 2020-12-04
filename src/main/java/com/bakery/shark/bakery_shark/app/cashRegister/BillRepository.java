@@ -24,5 +24,13 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     @Query(value = "SELECT DATE (created_on), real_sum_of_order from bill WHERE DATE (created_on) BETWEEN ? AND ?", nativeQuery = true)
     List<Object[]>getBillsFromCustomPeriod( String  startTime,  String endTime);
 
+    @Query(value = "SELECT SUM(real_sum_of_order) FROM bill where MONTH(created_on)= MONTH(CURRENT_DATE)",nativeQuery = true)
+    Double sumOfCurrentMonth();
 
+    @Query(value = "SELECT SUM(real_sum_of_order) FROM bill WHERE DATE (created_on)= SUBDATE(current_date,1)", nativeQuery = true)
+    Double sumOfYesterdaySales();
+
+    @Query(value="SELECT SUM(real_sum_of_order) FROM bill WHERE MONTH(created_on)=MONTH(CURRENT_DATE) AND " +
+            "YEAR(created_on) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 YEAR))",nativeQuery = true)
+    Double sumOfThisMonthYearBefore();
 }

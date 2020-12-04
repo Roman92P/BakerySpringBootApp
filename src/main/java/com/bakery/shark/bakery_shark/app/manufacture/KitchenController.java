@@ -24,6 +24,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -222,11 +224,14 @@ public class KitchenController {
 //     get ingredient and change it stock quantity
                 Ingredient ingredient = jpaIngredientService.getIngredient(id).get();
                 if (ingredient.getLitr() != 0) {
-                    ingredient.setLitr(ingredient.getLitr() - (manufactureItemIngredientQuantity * quantity));
+                    double v = BigDecimal.valueOf(manufactureItemIngredientQuantity * quantity).setScale(3, RoundingMode.HALF_UP).doubleValue();
+                    ingredient.setLitr(ingredient.getLitr() - (v));
                 } else if (ingredient.getWeight() != 0) {
-                    ingredient.setWeight(ingredient.getWeight() - (manufactureItemIngredientQuantity * quantity));
+                    double v = BigDecimal.valueOf(manufactureItemIngredientQuantity * quantity).setScale(3, RoundingMode.HALF_UP).doubleValue();
+                    ingredient.setWeight(ingredient.getWeight() - (v));
                 } else {
-                    ingredient.setQuantity(ingredient.getQuantity() - (manufactureItemIngredientQuantity * quantity));
+                    double v = BigDecimal.valueOf(manufactureItemIngredientQuantity * quantity).setScale(3, RoundingMode.HALF_UP).doubleValue();
+                    ingredient.setQuantity(ingredient.getQuantity() - (v));
                 }
                 jpaIngredientService.updateIngredient(ingredient);
             }
@@ -266,7 +271,7 @@ public class KitchenController {
         for ( RecipeItem recipeItem:recipeItemList ){
             String ingredientName = recipeItem.getIngredients().getName();
             Double ingredientQuantity = recipeItem.getIngredientQuantity();
-            double manufactureItemIngQuantityToCheck = quantity * ingredientQuantity;
+            double manufactureItemIngQuantityToCheck = BigDecimal.valueOf(quantity * ingredientQuantity).setScale(3, RoundingMode.HALF_UP).doubleValue();
             WorkIngredientQuantity workIngredientByIngredientName =
                     jpaWorkIngredientQuantityService.getWorkIngredientByIngredientName(ingredientName);
             workIngredientByIngredientName.setWorkIngredientQuantity(workIngredientByIngredientName.getWorkIngredientQuantity()+manufactureItemIngQuantityToCheck);
@@ -290,8 +295,8 @@ public class KitchenController {
         for ( RecipeItem recipeItem : recipeItemList ){
             String ingredientName = recipeItem.getIngredients().getName();
             Double ingredientQuantity = recipeItem.getIngredientQuantity();
-            double newIngredientQuantity = newQuantity * ingredientQuantity;
-            double previousIngredientQuantity =previousItemQuantity*ingredientQuantity ;
+            double newIngredientQuantity = BigDecimal.valueOf(newQuantity * ingredientQuantity).setScale(3,RoundingMode.HALF_UP).doubleValue();
+            double previousIngredientQuantity = BigDecimal.valueOf(previousItemQuantity*ingredientQuantity).setScale(3, RoundingMode.HALF_UP).doubleValue() ;
             WorkIngredientQuantity workIngredientByIngredientName =
                     jpaWorkIngredientQuantityService.getWorkIngredientByIngredientName(ingredientName);
             double newWorkIngredientQuantity = workIngredientByIngredientName.getWorkIngredientQuantity()

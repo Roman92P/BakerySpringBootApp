@@ -11,4 +11,7 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
 
     @Query(value = "SELECT SUM(product_quantity) FROM stock", nativeQuery = true)
     Integer getSumOfStockProductQuantity();
+
+    @Query(value = "SELECT SUM(product_price) FROM stock" ,nativeQuery = true)
+    Double getSumOfStockProductCost();
 }

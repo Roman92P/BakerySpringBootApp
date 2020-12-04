@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +9,8 @@
           rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->
     <link href="/static/css/sb-admin-2.css" rel="stylesheet">
+    <!--    cancas for chart-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 </head>
 <body id="page-top">
 
@@ -23,38 +25,148 @@
             <!--        Content-->
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col">
-                        <table class="table table-hover table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Stock item id</th>
-                                <th>Stock Product Name</th>
-                                <th>Stock Product Price</th>
-                                <th>Stock Product Quantity</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="stockItem:${stock}">
-                                <td th:text="${stockItem.id}"></td>
-                                <td th:text="${stockItem.productName}"></td>
-                                <td th:text="${stockItem.productPrice}"></td>
-                                <td th:text="${stockItem.productQuantity}"></td>
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td>
-                                    <a th:href="@{/kitchen}" class="btn btn-primary btn-lg" role="button">Back to
-                                        kitchen</a>
-                                </td>
-                            </tr>
-                            </tfoot>
-                        </table>
+                    <div class="col-xs-12 col-sm-9 col-md-8 col-lg-6 mt-2 mb-2">
+                        <div class="card">
+                            <div class="card-header">
+                                Items on stock
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Here you can see all produced items. You can sell them in cash
+                                    register</h5>
+                                <div th:if="${dangerQuantity}">
+                                    <span class="text-danger" th:text="${dangerQuantity}"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <table class="table table-hover table-bordered table-responsive-sm">
+                                            <thead>
+                                            <tr>
+                                                <th>Stock item id</th>
+                                                <th>Stock Product Name</th>
+                                                <th>Stock Product Price</th>
+                                                <th>Stock Product Quantity</th>
+                                                <th>Stock Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="stockItem,index :${stock}">
+                                                <td th:text="${stockItem.id}"></td>
+                                                <td th:text="${stockItem.productName}"></td>
+                                                <td th:text="${stockItem.productPrice}"></td>
+                                                <td th:text="${stockItem.productQuantity}"></td>
+                                                <td>
+                                                    <div sec:authorize="hasRole('ADMIN')">
+                                                        <a class="btn btn-danger mt-1 mb-1" role="button"
+                                                           th:href="@{/stock/removeAll/{id}(id=${stockItem.id})}">
+                                                            Remove all
+                                                        </a>
+                                                        <br>
+                                                        <a data-target="#removeSetStockQuantityModal"
+                                                           data-toggle="modal"
+                                                           th:attrappend="data-target=${stockItem.id}"
+                                                           class="btn btn-primary text-light" role="button">Set
+                                                            Quantity</a>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="removeSetStockQuantityModal"
+                                                             th:attrappend="id=${stockItem.id}" tabindex="-1"
+                                                             role="dialog"
+                                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">Delete <span
+                                                                                th:text="${stockItem.productName}"></span>
+                                                                        </h5>
+                                                                        <button type="button" class="close"
+                                                                                data-dismiss="modal"
+                                                                                aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <form action="#" method="get"
+                                                                              th:action="@{/stock/delete}"
+                                                                              th:object="${stockItem}">
+                                                                            <input hidden name="id"
+                                                                                   th:value="${stockItem.id}"/>
+                                                                            <label th:for="${stockProduct.productQuantity}">
+                                                                                <input type="number"
+                                                                                       placeholder="Enter quantity to delete"
+                                                                                       th:default="0"
+                                                                                       th:field="${stockProduct.productQuantity}"/>
+                                                                            </label>
+                                                                            <input type="submit" class="btn btn-danger"
+                                                                                   value="Delete"/>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                                data-dismiss="modal">Cancel
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                            </tfoot>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col mt-1">
+                                        <a th:href="@{/cashRegister}" class="btn btn-dark">Go to chash register</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col mt-1">
+                                        <a th:href="@{/kitchen}" class="btn btn-dark" role="button">Go
+                                            to
+                                            kitchen</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 mt-1">
+                                        <a class="btn btn-primary btn-lg" role="button" href="/main">Back to main
+                                            page</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <a class="btn btn-primary btn-lg" role="button" href="/main">Back to main page</a>
+                    <div class="col-xs-12 col-sm-3 col-md-4 col-lg-6 mt-2 mb-2">
+                        <div class="card border-left-danger shadow h-100 py-2">
+                            <div class="card-header m-2">
+                                <i class="fas fa-poll"></i>
+                                <div class="text-xs font-weight-bold text-black-50 text-uppercase mb-1">Lost Product
+                                    Value
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mt-2">
+                                    <div class="col-sm-12 col-lg-6 col-md-3">
+                                        <input id="beginDate" type="date" class="myClassLp mr2"/>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-6 col md-9">
+                                        <input id="endDate" type="date" class="myClassLp mr2"/>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-auto ml-3 mt-2">
+                                            <a id="customBtn" role="button"
+                                               class="btn btn-primary text-light"
+                                            >Submit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lostCanvasRow" class="row">
+                                    <canvas id="lostProductsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,7 +197,7 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-<!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                <!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
                 <form th:action="@{/logout}" method="post">
                     <input class="fa fa-id-badge" type="submit" value="Wyloguj">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -101,5 +213,6 @@
 <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
 <!-- Custom scripts for all pages-->
 <script src="/static/js/sb-admin-2.min.js"></script>
+<script src="/static/js/stockCanvas.js"></script>
 </body>
 </html>

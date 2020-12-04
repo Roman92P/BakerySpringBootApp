@@ -76,4 +76,53 @@ public class AdminDashboardController {
     public List<Object[]> getSoldsInCurrentMonth(){
         return jpaBillService.getBillsForCurrentMonth();
     }
+
+    @ModelAttribute("currentMonthTotal")
+    public Double getCurrentMonthTotal() {
+        double totalSalesSumOfCurrentMonth;
+        try {
+            totalSalesSumOfCurrentMonth = jpaBillService.getTotalSalesSumOfCurrentMonth();
+        } catch (NullPointerException e) {
+            return 0.0;
+        }
+        return totalSalesSumOfCurrentMonth;
+    }
+
+    @ModelAttribute("yesterdaySalesSum")
+    public Double getSumOfYesterdayBills() {
+        double yesterdaySalesSum;
+        try {
+            yesterdaySalesSum = jpaBillService.getYesterdaySalesSum();
+        } catch (NullPointerException e) {
+            return 0.0;
+        }
+        return yesterdaySalesSum;
+    }
+
+    @ModelAttribute("monthSalesYearBefore")
+    public Double getSumFromThisMonthYB() {
+        double sumOfThisMonthYearBefore;
+        try {
+            sumOfThisMonthYearBefore = jpaBillService.getSumOfThisMonthYearBefore();
+        } catch (NullPointerException e) {
+            return 0.0;
+        }
+        return sumOfThisMonthYearBefore;
+    }
+
+    @ModelAttribute("totalPlusBacklog")
+    public Double gettotalAndBacklog() {
+        double totalSalesSumOfCurrentMonth;
+
+        Double sumOfAllStockProducts= jpaStockService.getSumOfAllStockProducts();
+        if(sumOfAllStockProducts==null){
+           sumOfAllStockProducts=0.0;
+        }
+        try {
+            totalSalesSumOfCurrentMonth = jpaBillService.getTotalSalesSumOfCurrentMonth();
+        } catch (NullPointerException e) {
+            totalSalesSumOfCurrentMonth=0.0;
+        }
+        return totalSalesSumOfCurrentMonth + sumOfAllStockProducts;
+    }
 }
