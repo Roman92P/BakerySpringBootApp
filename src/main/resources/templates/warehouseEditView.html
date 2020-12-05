@@ -44,7 +44,7 @@
                                         <div id="toDelIfAllNull">
                                             <div th:if="${ing.litr}!=0">
                                                 <label th:for="${ingredient.litr}">
-                                                    <span th:text="${ing.litr}"> L</span>
+                                                    <span th:text="${ing.litr} + L"></span>
                                                     <br>
                                                     <input type="number" th:step="0.01" min="0" th:value="${ing.litr}"
                                                            th:attr="name='litr'" placeholder="enter litr quantity"/>
@@ -54,7 +54,7 @@
                                             </div>
                                             <div th:if="${ing.quantity}!=0">
                                                 <label th:for="${ingredient.quantity}">
-                                                    <span th:text="${ing.quantity}"> Psc</span>
+                                                    <span th:text="${ing.quantity}+ Psc"></span>
                                                     <br>
                                                     <input type="number" min="0" th:step="0.01"
                                                            th:value="${ing.quantity}"
@@ -65,7 +65,7 @@
                                             </div>
                                             <div th:if="${ing.weight}!=0">
                                                 <label th:for="${ingredient.weight}">
-                                                    <span th:text="${ing.weight}"> Kg</span>
+                                                    <span th:text="${ing.weight}+ Kg"></span>
                                                     <br>
                                                     <input type="number" th:step="0.01" min="0" th:value="${ing.weight}"
                                                            th:attr="name='weight'"/>

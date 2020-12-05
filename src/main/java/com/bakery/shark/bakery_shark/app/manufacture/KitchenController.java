@@ -49,6 +49,7 @@ public class KitchenController {
 
         if (session.getAttribute("manufactured") == null) {
             jpaManufactureItemService.getAllItemsWithNullManufatured().forEach(jpaManufactureItemService::deleteManufactureItem);
+            session.removeAttribute("manufactured");
         }
         //summary of working order
         Set<ManufactureItem> allByNullManufactureId = jpaManufactureItemService.getAllItemsWithNullManufatured();
@@ -97,9 +98,13 @@ public class KitchenController {
                 jpaManufacturedService.addManufactured(manufactured);
             }
         }
-        OptionalDouble any = possibleNumberToProduce.stream().mapToDouble(value -> value).min();
-        if (any.isPresent()) {
-            model.addAttribute("kitchenBadges", any.getAsDouble());
+        try {
+            OptionalDouble any = possibleNumberToProduce.stream().mapToDouble(value -> value).min();
+            if (any.isPresent()) {
+                model.addAttribute("kitchenBadges", any.getAsDouble());
+            }
+        }catch (NullPointerException e){
+            model.addAttribute("nullMessage", "There is nothing to show");
         }
         //show message if choosen quantity in calculator is to much
         HttpSession session1 = request.getSession();

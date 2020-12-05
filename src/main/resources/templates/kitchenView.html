@@ -45,6 +45,9 @@
             </div>
             <!--        Content-->
             <div class="container-fluid h-50">
+                <div th:if="${nullMessage}">
+                    <h4><span class="text-info" th:text="${nullMessage}"></span></h4>
+                </div>
                 <div th:if="${editQuantityError}!=null">
                     <div class="card">
                         <div class="card-body">
