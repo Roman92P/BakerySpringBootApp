@@ -89,7 +89,7 @@ public class CashRegisterController {
     public String showCashRegister(Model model, HttpServletRequest request, HttpSession session,SessionStatus status) {
         List<BillItem> allItemsWithNullBill = jpaBillItemService.getAllItemsWithNullBill();
         if(allItemsWithNullBill.size()==0){
-            logger.error("Session status in 1 view: "+ status.isComplete());
+//            logger.error("Session status in 1 view: "+ status.isComplete());
             status.setComplete();
         }
         model.addAttribute("allItemsWithNullBill", allItemsWithNullBill);

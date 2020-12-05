@@ -65,13 +65,14 @@ public class KitchenController {
         //show only products that can be manufactured
         List<WorkIngredientQuantity> allWorkIngredients = jpaWorkIngredientQuantityService.getAllWorkIngredients();
         List<Product> allProducts = jpaProductService.getAllProducts();
-        List<Product> productAbleToManufacture = new ArrayList<>();
+        List<Product> productAbleToManufacture = new LinkedList<>();
         List<Double> possibleNumberToProduce = null;
+        List<Double>badgesList = new LinkedList<>();
         for ( Product p : allProducts ) {
             boolean checkIfAbleToAddProduct = true;
             Set<RecipeItem> recipeItemList = p.getRecipe().getRecipeItemList();
             //possible number to produce
-            possibleNumberToProduce = new ArrayList<>();
+            possibleNumberToProduce = new LinkedList<>();
             double workIngredientQuantity = 0;
             double ingredientQuantity = 0;
             // end possible numer to produce
@@ -97,15 +98,22 @@ public class KitchenController {
                 manufactured.setUser(byUserName);
                 jpaManufacturedService.addManufactured(manufactured);
             }
-        }
-        try {
-            OptionalDouble any = possibleNumberToProduce.stream().mapToDouble(value -> value).min();
-            if (any.isPresent()) {
-                model.addAttribute("kitchenBadges", any.getAsDouble());
+            try {
+                OptionalDouble any = possibleNumberToProduce.stream().mapToDouble(value -> value).min();
+                if (any.isPresent()) {
+//                model.addAttribute("kitchenBadges", any.getAsDouble());
+                    double asDouble = any.getAsDouble();
+                    badgesList.add(asDouble);
+                }
+            }catch (NullPointerException e){
+                model.addAttribute("nullMessage", "There is nothing to show");
             }
-        }catch (NullPointerException e){
-            model.addAttribute("nullMessage", "There is nothing to show");
         }
+
+        for(Double d: badgesList){
+            logger.error(d.toString());
+        }
+
         //show message if choosen quantity in calculator is to much
         HttpSession session1 = request.getSession();
         if (session1.getAttribute("manufactureProductQuantityErrorIngredients") != null) {
@@ -124,7 +132,7 @@ public class KitchenController {
 
         }
         model.addAttribute("products", productAbleToManufacture);
-        logger.debug("Number of products that can be manufactured: " + productAbleToManufacture.size());
+        model.addAttribute("bagdes", badgesList);
         return "kitchenView";
     }
 

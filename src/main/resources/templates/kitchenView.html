@@ -110,7 +110,7 @@
                                 <div class="card" style="width: 11rem;">
                                     <div class="card-body">
                                         <a th:href="@{/kitchen/createManufactured/{id}(id=${product.id})}">
-                                            <button class="btn-primary"><span class="badge badge-light"><span th:text="${kitchenBadges}"></span></span>
+                                            <button class="btn-primary"><span class="badge badge-light"><span th:text="${bagdes[productStat.index]}"></span></span>
                                                 <i class="fas fa-bread-slice"></i>
                                                 <h5 class="card-title"><p th:text="${product.name}"></p>
                                                 </h5>
