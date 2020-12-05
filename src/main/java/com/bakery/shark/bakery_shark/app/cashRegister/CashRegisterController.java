@@ -108,8 +108,8 @@ public class CashRegisterController {
     }
 
     //Add product quantity
-    @RequestMapping("/createSoldItem/{id}")
-    public String createSoldItem(@PathVariable long id, Model model) {
+    @RequestMapping("/createSoldItem/{id}/{name}")
+    public String createSoldItem(@PathVariable long id, @PathVariable String name, Model model) {
         Stock stock = jpaStockService.getStockProduct(id).orElseThrow(EntityNotFoundException::new);
         BillItem billItem = new BillItem();
         billItem.setSoldProductName(stock.getProductName());

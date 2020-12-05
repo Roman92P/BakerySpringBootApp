@@ -49,10 +49,9 @@
                                         <div sec:authorize="isAuthenticated()">
                                             <h5 class="card-title">Ingredients: </h5>
                                             <div th:each="ingredient:${product.recipe.recipeItemList}">
-                                                <p class="card-text"><span
+                                                <span class="card-text text-sm-left"><span
                                                         th:text="${ingredient.ingredients.name}"></span>
-                                                </p>
-                                                <br>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

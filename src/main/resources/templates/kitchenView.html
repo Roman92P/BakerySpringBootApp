@@ -107,7 +107,7 @@
                                 <div class="card" style="width: 11rem;">
                                     <div class="card-body">
                                         <a th:href="@{/kitchen/createManufactured/{id}(id=${product.id})}">
-                                            <button class="btn-primary">
+                                            <button class="btn-primary"><span class="badge badge-light"><span th:text="${kitchenBadges}"></span></span>
                                                 <i class="fas fa-bread-slice"></i>
                                                 <h5 class="card-title"><p th:text="${product.name}"></p>
                                                 </h5>
@@ -136,12 +136,12 @@
                                     <a th:href="@{/kitchen/deleteWorkItem/{id}(id=${item.id})}" class="btn btn-dark"
                                        role="button">Remove</a>
                                     <br>
-                                    <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#editModal">
+                                    <button type="button" th:attrappend="data-target=${item.id}" class="btn btn-primary mt-1" data-toggle="modal" data-target="#editModal">
                                         Edit
                                     </button>
 
                                     <!-- Modal -->
-                                    <div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+                                    <div class="modal fade" th:attrappend="id=${item.id}" id="editModal" tabindex="-1" role="dialog"
                                          aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">

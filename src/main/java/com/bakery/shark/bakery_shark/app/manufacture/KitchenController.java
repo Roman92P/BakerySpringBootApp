@@ -14,10 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
@@ -27,14 +25,12 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @AllArgsConstructor
 @RequestMapping("/kitchen")
-//@Scope("session")
+//@SessionAttributes({"manufactured"})
 public class KitchenController {
     private final Logger logger = LoggerFactory.getLogger(KitchenController.class);
 
@@ -47,35 +43,47 @@ public class KitchenController {
     private final JpaWorkIngredientQuantityService jpaWorkIngredientQuantityService;
     private final UserService userService;
 
-//    private final ManufacturedRepository manufacturedRepository;
-
     @RequestMapping("")
-    public String getKitchenView(@ModelAttribute("editQuantityError") String errorModel ,Model model, HttpServletRequest request, Principal principal) {
+    public String getKitchenView(@ModelAttribute("editQuantityError") String errorModel, Model model, HttpSession session, HttpServletRequest request, Principal principal,
+                                 SessionStatus status) {
+
+        if (session.getAttribute("manufactured") == null) {
+            jpaManufactureItemService.getAllItemsWithNullManufatured().forEach(jpaManufactureItemService::deleteManufactureItem);
+        }
+        //summary of working order
         Set<ManufactureItem> allByNullManufactureId = jpaManufactureItemService.getAllItemsWithNullManufatured();
         model.addAttribute("allManufacturedItems", allByNullManufactureId);
         // add work Ingredients Quantity to find out if we can manufacture selected product, if we have enough ingredient quantity
         if (allByNullManufactureId.size() == 0) {
+            jpaWorkIngredientQuantityService.getAllWorkIngredients().forEach(jpaWorkIngredientQuantityService::deleteWorkIngredient);
             copyIngredientstoWorkIngredients();
-        }
-        if (allByNullManufactureId.size() != 0 && request.getSession().getAttribute("manufactured") == null) {
-            allByNullManufactureId
-                    .forEach(jpaManufactureItemService::deleteManufactureItem);
-            return "redirect:/kitchen";
+            if (session.getAttribute("manufactured") != null) {
+                session.removeAttribute("manufactured");
+            }
         }
         //show only products that can be manufactured
         List<WorkIngredientQuantity> allWorkIngredients = jpaWorkIngredientQuantityService.getAllWorkIngredients();
         List<Product> allProducts = jpaProductService.getAllProducts();
         List<Product> productAbleToManufacture = new ArrayList<>();
+        List<Double> possibleNumberToProduce = null;
         for ( Product p : allProducts ) {
             boolean checkIfAbleToAddProduct = true;
             Set<RecipeItem> recipeItemList = p.getRecipe().getRecipeItemList();
+            //possible number to produce
+            possibleNumberToProduce = new ArrayList<>();
+            double workIngredientQuantity = 0;
+            double ingredientQuantity = 0;
+            // end possible numer to produce
             for ( RecipeItem recipeItem : recipeItemList ) {
                 String ingredientName = recipeItem.getIngredients().getName();
-                Double ingredientQuantity = recipeItem.getIngredientQuantity();
+                ingredientQuantity = recipeItem.getIngredientQuantity();
                 WorkIngredientQuantity workIngredientByIngredientName = jpaWorkIngredientQuantityService.getWorkIngredientByIngredientName(ingredientName);
+                workIngredientQuantity = workIngredientByIngredientName.getWorkIngredientQuantity();
                 if (ingredientQuantity > workIngredientByIngredientName.getWorkIngredientQuantity()) {
                     checkIfAbleToAddProduct = false;
                 }
+                double v = workIngredientQuantity / ingredientQuantity;
+                possibleNumberToProduce.add(v);
             }
             if (checkIfAbleToAddProduct) {
                 productAbleToManufacture.add(p);
@@ -89,21 +97,25 @@ public class KitchenController {
                 jpaManufacturedService.addManufactured(manufactured);
             }
         }
+        OptionalDouble any = possibleNumberToProduce.stream().mapToDouble(value -> value).min();
+        if (any.isPresent()) {
+            model.addAttribute("kitchenBadges", any.getAsDouble());
+        }
         //show message if choosen quantity in calculator is to much
-        HttpSession session = request.getSession();
-        if (session.getAttribute("manufactureProductQuantityErrorIngredients") != null) {
+        HttpSession session1 = request.getSession();
+        if (session1.getAttribute("manufactureProductQuantityErrorIngredients") != null) {
 
-            Object manufactureProductQuantityErrorIngredients = session.getAttribute("manufactureProductQuantityErrorIngredients");
-            String productNameQuantityError = (String) session.getAttribute("productNameQuantityError");
-            Integer productQuantityError = (Integer) session.getAttribute("productQuantityError");
+            Object manufactureProductQuantityErrorIngredients = session1.getAttribute("manufactureProductQuantityErrorIngredients");
+            String productNameQuantityError = (String) session1.getAttribute("productNameQuantityError");
+            Integer productQuantityError = (Integer) session1.getAttribute("productQuantityError");
 
             model.addAttribute("alertIngredients", manufactureProductQuantityErrorIngredients);
             model.addAttribute("alertQuantity", productQuantityError);
             model.addAttribute("alertProductName", productNameQuantityError);
 
-            session.removeAttribute("manufactureProductQuantityErrorIngredients");
-            session.removeAttribute("productNameQuantityError");
-            session.removeAttribute("productQuantityError");
+            session1.removeAttribute("manufactureProductQuantityErrorIngredients");
+            session1.removeAttribute("productNameQuantityError");
+            session1.removeAttribute("productQuantityError");
 
         }
         model.addAttribute("products", productAbleToManufacture);
@@ -116,7 +128,7 @@ public class KitchenController {
         List<WorkIngredientQuantity> workIngredientQuantities = new ArrayList<>();
         for ( Ingredient i : allIngredients ) {
             WorkIngredientQuantity workIngredientQuantity = new WorkIngredientQuantity();
-            workIngredientQuantity.setId(i.getId());
+//            workIngredientQuantity.setId(i.getId());
             workIngredientQuantity.setWorkIngredientName(i.getName());
             if (i.getLitr() != 0) {
                 workIngredientQuantity.setWorkIngredientQuantity(i.getLitr());
@@ -133,22 +145,20 @@ public class KitchenController {
     }
 
     @RequestMapping("/createManufactured/{id}")
-    public String createManufacturedProduct(@PathVariable long id, Model model, HttpServletRequest request) {
+    public String createManufacturedProduct(@PathVariable long id, Model model) {
         logger.error("Product id witch was choosen in kitchen view: " + id);
         ManufactureItem manufactureItem = new ManufactureItem();
         manufactureItem.setProduct(jpaProductService.getProduct(id).orElseThrow(EntityNotFoundException::new));
         model.addAttribute("productId", id);
         model.addAttribute("manufactureItem", manufactureItem);
-
-        if (request.getSession().getAttribute("manufactured") == null) {
-            request.getSession().setAttribute("manufactured", jpaManufacturedService.getManufacturedNotFinalized().getId());
-        }
         return "kitchenAddProductQuantityView";
     }
 
     @PostMapping("/addProducedItemProduct")
-    public String addProducedItem(@Valid ManufactureItem manufactureItem, BindingResult result, Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
+    public String addProducedItem(@Valid ManufactureItem manufactureItem, BindingResult result, Model model, HttpServletRequest request, HttpSession session) {
+        if (session.getAttribute("manufactured") == null) {
+            session.setAttribute("manufactured", jpaManufacturedService.getManufacturedNotFinalized().getId());
+        }
         // check if manufacture item has errors
         if (result.hasErrors()) {
             return "kitchenAddProductQuantityView";
@@ -172,12 +182,13 @@ public class KitchenController {
                 alerts.add(ingredientName);
             }
         }
-        if (alerts.size() > 0) {
 
-            if (session.getAttribute("manufactureProductQuantityErrorIngredients") == null) {
-                session.setAttribute("manufactureProductQuantityErrorIngredients", alerts);
-                session.setAttribute("productNameQuantityError", product.getName());
-                session.setAttribute("productQuantityError", productQuantity);
+        HttpSession session1 = request.getSession();
+        if (alerts.size() > 0) {
+            if (session1.getAttribute("manufactureProductQuantityErrorIngredients") == null) {
+                session1.setAttribute("manufactureProductQuantityErrorIngredients", alerts);
+                session1.setAttribute("productNameQuantityError", product.getName());
+                session1.setAttribute("productQuantityError", productQuantity);
             }
             return "redirect:/kitchen";
         }
@@ -196,11 +207,10 @@ public class KitchenController {
     }
 
     @RequestMapping("/deleteWorkOrder")
-    public String deleteWorkOrder(HttpServletRequest request) {
+    public String deleteWorkOrder(HttpServletRequest request, HttpSession session, SessionStatus status) {
         Set<ManufactureItem> allItemsWithNullManufatured = jpaManufactureItemService.getAllItemsWithNullManufatured();
         allItemsWithNullManufatured.stream()
                 .forEach(jpaManufactureItemService::deleteManufactureItem);
-        HttpSession session = request.getSession();
         if (session.getAttribute("manufactured") != null) {
             session.removeAttribute("manufactured");
         }
@@ -208,11 +218,9 @@ public class KitchenController {
     }
 
     @RequestMapping("/finalizeOrder")
-    public String finalizeWorkOrder(HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession();
+    public String finalizeWorkOrder(HttpServletRequest request, Model model, HttpSession session) {
         Long manufactured1 = (Long) session.getAttribute("manufactured");
-
-        logger.error("Id manufactured in finalize: " + manufactured1);
+        logger.error("Manufactured w finalize: "+ manufactured1);
 
         Set<ManufactureItem> allByNullManufactureId = jpaManufactureItemService.getAllItemsWithNullManufatured();
         for ( ManufactureItem manufactureItem : allByNullManufactureId ) {
@@ -257,24 +265,23 @@ public class KitchenController {
     @RequestMapping("/summarizing")
     public String showBookedOrderDetails(HttpServletRequest request, Model model) {
         String finalManufactureId = request.getParameter("finalManufactureId");
-//        addProduced();
         model.addAttribute("workOrder", jpaManufactureItemService.getAllByManufactureId(Long.parseLong(finalManufactureId)));
         return "kitchenWorkOrderDetails";
     }
 
     @RequestMapping("/deleteWorkItem/{id}")
-    public String deleteWorkItem(@PathVariable long id){
+    public String deleteWorkItem(@PathVariable long id) {
         ManufactureItem manufactureItem = jpaManufactureItemService.getManufactureItem(id).orElseThrow(EntityNotFoundException::new);
 
         int quantity = manufactureItem.getQuantity();
         Set<RecipeItem> recipeItemList = manufactureItem.getProduct().getRecipe().getRecipeItemList();
-        for ( RecipeItem recipeItem:recipeItemList ){
+        for ( RecipeItem recipeItem : recipeItemList ) {
             String ingredientName = recipeItem.getIngredients().getName();
             Double ingredientQuantity = recipeItem.getIngredientQuantity();
             double manufactureItemIngQuantityToCheck = BigDecimal.valueOf(quantity * ingredientQuantity).setScale(3, RoundingMode.HALF_UP).doubleValue();
             WorkIngredientQuantity workIngredientByIngredientName =
                     jpaWorkIngredientQuantityService.getWorkIngredientByIngredientName(ingredientName);
-            workIngredientByIngredientName.setWorkIngredientQuantity(workIngredientByIngredientName.getWorkIngredientQuantity()+manufactureItemIngQuantityToCheck);
+            workIngredientByIngredientName.setWorkIngredientQuantity(workIngredientByIngredientName.getWorkIngredientQuantity() + manufactureItemIngQuantityToCheck);
             jpaWorkIngredientQuantityService.updateWorkIngredient(workIngredientByIngredientName);
         }
         jpaManufactureItemService.deleteManufactureItem(manufactureItem);
@@ -282,39 +289,38 @@ public class KitchenController {
     }
 
     @PostMapping("/editWorkItem/{cquantity}")
-    public String editWorkItem(@PathVariable int cquantity ,@Valid ManufactureItem manufactureItem, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
-        if(bindingResult.hasErrors()){
+    public String editWorkItem(@PathVariable int cquantity, @Valid ManufactureItem manufactureItem, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("editQuantityError", "Quantity of item can't be less then 1");
             return "redirect:/kitchen";
         }
         int previousItemQuantity = cquantity;
-        logger.error("previous quantity: "+ previousItemQuantity);
+        logger.error("previous quantity: " + previousItemQuantity);
         int newQuantity = manufactureItem.getQuantity();
-        logger.error("new quantity: "+ newQuantity);
+        logger.error("new quantity: " + newQuantity);
         Set<RecipeItem> recipeItemList = manufactureItem.getProduct().getRecipe().getRecipeItemList();
-        for ( RecipeItem recipeItem : recipeItemList ){
+        for ( RecipeItem recipeItem : recipeItemList ) {
             String ingredientName = recipeItem.getIngredients().getName();
             Double ingredientQuantity = recipeItem.getIngredientQuantity();
-            double newIngredientQuantity = BigDecimal.valueOf(newQuantity * ingredientQuantity).setScale(3,RoundingMode.HALF_UP).doubleValue();
-            double previousIngredientQuantity = BigDecimal.valueOf(previousItemQuantity*ingredientQuantity).setScale(3, RoundingMode.HALF_UP).doubleValue() ;
+            double newIngredientQuantity = BigDecimal.valueOf(newQuantity * ingredientQuantity).setScale(3, RoundingMode.HALF_UP).doubleValue();
+            double previousIngredientQuantity = BigDecimal.valueOf(previousItemQuantity * ingredientQuantity).setScale(3, RoundingMode.HALF_UP).doubleValue();
             WorkIngredientQuantity workIngredientByIngredientName =
                     jpaWorkIngredientQuantityService.getWorkIngredientByIngredientName(ingredientName);
             double newWorkIngredientQuantity = workIngredientByIngredientName.getWorkIngredientQuantity()
-                    +previousIngredientQuantity-newIngredientQuantity;
-            if(newWorkIngredientQuantity<0.0){
+                    + previousIngredientQuantity - newIngredientQuantity;
+            if (newWorkIngredientQuantity < 0.0) {
                 return "redirect:/kitchen";
-            }else {
+            } else {
                 workIngredientByIngredientName.setWorkIngredientQuantity(newWorkIngredientQuantity);
                 jpaWorkIngredientQuantityService.updateWorkIngredient(workIngredientByIngredientName);
             }
         }
-
         jpaManufactureItemService.updateManufactureItem(manufactureItem);
         return "redirect:/kitchen";
     }
 
     @ModelAttribute("manufactureItemToEdit")
-    public ManufactureItem getManufactureItemToEdit(){
+    public ManufactureItem getManufactureItemToEdit() {
         return new ManufactureItem();
     }
 }

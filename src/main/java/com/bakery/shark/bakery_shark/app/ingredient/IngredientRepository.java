@@ -9,4 +9,6 @@ public interface IngredientRepository extends JpaRepository<Ingredient,Long> {
     @Query(value = "SELECT COUNT(id) FROM ingredients where liters=0 AND quantity=0 AND weight=0", nativeQuery = true)
     Integer getNumberOfEmptyIngredients();
 
+    Ingredient findByNameEquals(String name);
+
 }

@@ -36,7 +36,11 @@ public class IngredientController {
     }
 
     @PostMapping("/add")
-    public String addIngredient(@Valid Ingredient ingredient, BindingResult result){
+    public String addIngredient(@Valid Ingredient ingredient, BindingResult result, Model model){
+        if(ingredientService.getByIngredientName(ingredient.getName())!=null){
+            model.addAttribute("existsIngredient", "Allready exists, enter other name");
+            return "addIngredientForm";
+        }
         if(result.hasErrors()){
             return "addIngredientForm";
         }

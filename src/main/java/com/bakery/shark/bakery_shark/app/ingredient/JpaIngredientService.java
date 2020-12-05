@@ -74,4 +74,8 @@ public class JpaIngredientService implements IngredientService {
     public Integer getCountOfEmptyIngredients(){
        return ingredientRepository.getNumberOfEmptyIngredients();
     }
+
+    public Ingredient getByIngredientName(String ingredientName){
+        return ingredientRepository.findByNameEquals(ingredientName);
+    }
 }

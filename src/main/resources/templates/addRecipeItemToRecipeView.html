@@ -41,7 +41,7 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-xs-12">
                                     <label th:for="${recipeItem.ingredientQuantity}">Set quantity
-                                        <input th:value="*{ingredientQuantity}" type="number" th:step="0.01" th:field="*{ingredientQuantity}"/>
+                                        <input th:value="*{ingredientQuantity}" type="number" th:step="0.001" th:field="*{ingredientQuantity}"/>
                                     </label>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                     <td th:text="${recipeItem.id}"></td>
                                     <td th:text="${recipeItem.ingredientQuantity}"></td>
                                     <td th:text="${recipeItem.ingredients.name}"></td>
-                                    <td th:text="${recipeItem.recipe.name}"></td>
+                                    <td th:text="${recipeItem.recipe.getName()}"></td>
                                     <td>
                                         <p><a th:href="@{/recipeItem/edit/{id}(id=${recipeItem.id})}">Edit</a></p>
                                         <p><a th:href="@{/recipeItem/delete/{id1}/{id2}(id1=${recipeItem.ingredients.id}, id2=${recipeItem.recipe.id})}">Delete</a></p>

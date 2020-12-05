@@ -42,14 +42,14 @@ public class LoginController {
 
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public String login() {
-        logger.error("Loger działa");
+//        logger.error("Loger działa");
         return "login";
     }
 
     @PostMapping("/login")
     public String login(Model model, CurrentUser currentUser) {
         User user = currentUser.getUser();
-        logger.error("Nowy user czy jest aktywowany: " + user.isActive());
+//        logger.error("Nowy user czy jest aktywowany: " + user.isActive());
 
         if (user.isActive()) {
             return "home";
@@ -87,7 +87,7 @@ public class LoginController {
                 image = Base64.getEncoder().encodeToString(img);
             }
             allPictures.put(p.getId(), image);
-            logger.error("All products and their img's: "+" "+ p.getId() + " "+image);
+//            logger.error("All products and their img's: "+" "+ p.getId() + " "+image);
         }
 
         model.addAttribute("images", allPictures);

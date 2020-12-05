@@ -66,8 +66,8 @@
                             <div class="col">
                                 <div class="card" style="width: 10rem;">
                                     <div class="card-body">
-                                        <a th:href="@{/cashRegister/createSoldItem/{id}(id=${product.id})}">
-                                            <button class="btn-primary">
+                                        <a th:href="@{/cashRegister/createSoldItem/{id}/{name}(id=${product.id}, name=${product.productName})}">
+                                            <button class="btn-primary"><span class="badge badge-light"><span th:text="${product.productQuantity}"></span></span>
                                                 <i class="fas fa-bread-slice"></i>
                                                 <h5 class="card-title"><p th:text="${product.productName}"></p></h5>
                                             </button>
