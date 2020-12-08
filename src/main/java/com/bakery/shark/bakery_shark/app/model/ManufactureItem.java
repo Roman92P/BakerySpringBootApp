@@ -23,9 +23,11 @@ public class ManufactureItem {
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne
+    @JoinColumn(name = "manufactured_id")
     private Manufactured manufactured;
 
     @Min(value = 1)

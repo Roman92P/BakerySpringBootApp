@@ -19,6 +19,7 @@ public class RecipeItem {
 
 
     @ManyToOne
+    @JoinColumn(name = "ingredients_id")
     private Ingredient ingredients;
 
     @NotZeroDoubleValidator
@@ -26,6 +27,7 @@ public class RecipeItem {
     private Double ingredientQuantity;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
     public RecipeItem() {

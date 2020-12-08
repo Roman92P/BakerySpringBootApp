@@ -93,7 +93,7 @@ public class CashRegisterController {
             status.setComplete();
         }
         model.addAttribute("allItemsWithNullBill", allItemsWithNullBill);
-        return "CashRegisterView";
+        return "cashRegisterView";
     }
 
     @ModelAttribute("stockToSold")

@@ -28,6 +28,7 @@ public class BillItem {
     private int soldProductQuantity;
 
     @ManyToOne
+    @JoinColumn(name = "bill_id")
     private Bill bill;
 
     @OneToOne

@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -19,8 +17,9 @@ public class Role {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    Set<User>users= new HashSet<>();
+//    @ManyToMany
+//    @JoinTable(name = "user_role")
+//    Set<User>persons= new HashSet<>();
 
     public Role(){
     }

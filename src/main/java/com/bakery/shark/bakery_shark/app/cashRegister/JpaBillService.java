@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -73,7 +74,7 @@ public class JpaBillService implements BillService {
         return billRepository.getBillsFromPreviousMonth();
     }
 
-    public List<Object[]> getBillsForCertainPeriod(String startDate, String endDate){
+    public List<Object[]> getBillsForCertainPeriod(LocalDate startDate, LocalDate endDate){
        return billRepository.getBillsFromCustomPeriod(startDate,endDate);
     }
 

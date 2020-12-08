@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,12 @@ public class LostProductsRestController {
 
     @RequestMapping("/lostMoney/{startDate}/{endDate}")
     public String getAllLostProductsValue(@PathVariable String startDate, @PathVariable String endDate){
-        List<Object[]> lpList = lostProductService.getAllLostsBetweenDates(startDate, endDate);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(startDate, formatter);
+        LocalDate localDate1 = LocalDate.parse(endDate, formatter);
+
+        List<Object[]> lpList = lostProductService.getAllLostsBetweenDates(localDate, localDate1);
         List<LostProductDTO> lpDTOList = new ArrayList<>();
         for (Object[] lp : lpList){
             LostProductDTO lostProductDTO = new LostProductDTO();

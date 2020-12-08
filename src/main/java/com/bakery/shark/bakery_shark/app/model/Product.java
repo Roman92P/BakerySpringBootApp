@@ -32,10 +32,12 @@ public class Product {
 //    private Recipe recipe;
 
     @ManyToOne
+    @JoinColumn(name="recipe_id")
     private Recipe recipe;
 
     @Lob
-    @Column(name = "photo", columnDefinition="MEDIUMBLOB")
+//    @Column(name = "photo", columnDefinition="MEDIUMBLOB")
+    @Column(name = "photo")
     private byte[] photo;
 
     public Product() {

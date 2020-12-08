@@ -15,6 +15,7 @@ import java.util.Set;
 @Setter
 @Getter
 @AllArgsConstructor
+@Table(name = "persons")
 public class User {
 
 
@@ -45,7 +46,7 @@ public class User {
     private boolean enabled;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles=new HashSet<>();
     public User() {

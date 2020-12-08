@@ -15,8 +15,7 @@ public interface BillItemRepository extends JpaRepository<BillItem, Long> {
 
     List<BillItem> findAllByBill_Id(Long billId);
 
-    @Query(value = "SELECT sold_product_name, sold_product_quantity From bill_item " +
-            "INNER JOIN bill on bill_item.bill_id = bill.id " +
-            "where YEAR(created_on) =? AND MONTH(created_on) = ?", nativeQuery = true)
+    @Query(value = "Select sold_product_name, sold_product_quantity FROM bill_item INNER JOIN bill b on b.id = bill_item.bill_id" +
+            " WHERE to_char(b.created_on, 'YYYY') = ? AND to_char(b.created_on, 'MM') = ?;", nativeQuery = true)
     List<Object[]>getSoldProductsBetweenDates(String year, String month);
 }

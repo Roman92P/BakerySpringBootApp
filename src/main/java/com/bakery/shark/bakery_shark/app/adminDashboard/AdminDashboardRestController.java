@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,14 +55,17 @@ public class AdminDashboardRestController {
     }
 
     @GetMapping("/customSoldDate/{start}/{end}")
-    public String getSoldFromCustomPeriod(@PathVariable String start, @PathVariable String end){
-        List<Object[]> billsForCertainPeriod = jpaBillService.getBillsForCertainPeriod(start, end);
-        List<BillDto>bills = new ArrayList<>();
-        for (Object[] bill : billsForCertainPeriod ){
+    public String getSoldFromCustomPeriod(@PathVariable String start, @PathVariable String end) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(start, formatter);
+        LocalDate localDate1 = LocalDate.parse(end, formatter);
+        List<Object[]> billsForCertainPeriod = jpaBillService.getBillsForCertainPeriod(localDate,localDate1);
+        List<BillDto> bills = new ArrayList<>();
+        for ( Object[] bill : billsForCertainPeriod ) {
             BillDto billDto = new BillDto();
             Date billDate = (Date) bill[0];
-            billDto.setDate( billDate.toString());
-            billDto.setSum((Double)bill[1]);
+            billDto.setDate(billDate.toString());
+            billDto.setSum((Double) bill[1]);
             bills.add(billDto);
         }
         return gson.toJson(bills);
@@ -68,6 +73,7 @@ public class AdminDashboardRestController {
 
     @GetMapping(value = "/mostPopularProducts/{year}/{month}", produces = "text/plain;charset=UTF-8")
     public String getMostPopularProductByDate(@PathVariable String year, @PathVariable String month){
+
         List<Object[]> soldNamesAndQuantitiesForPeriod = jpaBillItemService.getSoldNamesAndQuantitiesForPeriod(year, month);
         List<BillItemDTO> billItemDTOList = new ArrayList<>();
         for(Object[] billItem : soldNamesAndQuantitiesForPeriod){

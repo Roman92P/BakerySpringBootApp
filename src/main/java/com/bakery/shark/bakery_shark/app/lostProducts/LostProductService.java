@@ -3,6 +3,7 @@ package com.bakery.shark.bakery_shark.app.lostProducts;
 import com.bakery.shark.bakery_shark.app.model.LostProducts;
 import com.bakery.shark.bakery_shark.app.model.Stock;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,5 +21,5 @@ public interface LostProductService {
 
     void addStockToLost(Stock stock, int quantity);
 
-    List<Object[]>getAllLostsBetweenDates(String startDate, String endDate);
+    List<Object[]>getAllLostsBetweenDates(LocalDate startDate, LocalDate endDate);
 }

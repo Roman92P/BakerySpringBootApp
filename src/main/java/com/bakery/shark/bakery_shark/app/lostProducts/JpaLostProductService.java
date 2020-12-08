@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,7 @@ public class JpaLostProductService implements LostProductService {
     }
 
     @Override
-    public List<Object[]> getAllLostsBetweenDates(String startDate, String endDate) {
+    public List<Object[]> getAllLostsBetweenDates(LocalDate startDate, LocalDate endDate) {
         return lostProductRepository.getLostsBetweenDates(startDate, endDate);
     }
 }
