@@ -4,8 +4,6 @@ import com.bakery.shark.bakery_shark.app.validation.IngredientQuantity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -43,8 +41,8 @@ public class Ingredient {
     public Ingredient() {
     }
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany( mappedBy = "ingredients")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany( mappedBy = "ingredients",cascade = CascadeType.REMOVE)
     private Set<RecipeItem> recipes=new HashSet<>();
 
 }
