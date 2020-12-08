@@ -1,5 +1,6 @@
 INSERT INTO role (id ,name) VALUES (1,'ROLE_ADMIN');
 INSERT INTO role (id,name) VALUES (2,'ROLE_USER');
+INSERT INTO role (id,name) VALUES (3,'ROLE_GUEST');
 INSERT INTO ingredients (liters, name, quantity, weight) VALUES (20.00,'mleko',0,0);
 INSERT INTO ingredients (liters, name, quantity, weight) VALUES (0,'jajka', 10, 0);
 INSERT INTO ingredients (liters, name, quantity, weight) VALUES (0,'mąka',0,20.00);
