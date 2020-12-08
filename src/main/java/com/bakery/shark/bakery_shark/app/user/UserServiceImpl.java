@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
         //for email
         if(!StringUtils.isEmpty(user.getEmail())){
             String message = String.format("Hello %s! Welcome to Bakery Manager. Please activate your account" +
-                    " throught this link: http://localhost:8080/activate/%s", user.getFirstName(), user.getActivationCode());
+                    " throught this link: https://bakery-manager.herokuapp.com/activate/%s", user.getFirstName(), user.getActivationCode());
             mailSender.send(user.getEmail(), "Activation code", message);
         }
         return true;
