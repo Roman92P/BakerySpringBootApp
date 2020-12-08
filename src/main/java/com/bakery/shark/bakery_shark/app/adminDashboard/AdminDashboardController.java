@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -36,7 +35,10 @@ public class AdminDashboardController {
     @ModelAttribute("producedTodayQuantity")
     public Integer getTodayProducedQuantity() {
         Integer producedQuantityToday = jpaProducedService.getProducedQuantityToday();
-        return Objects.requireNonNullElse(producedQuantityToday, 0);
+        if(producedQuantityToday==null){
+            return 0;
+        }
+        return producedQuantityToday;
     }
 
     @ModelAttribute("soldToday")
