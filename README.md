@@ -24,6 +24,6 @@ After that just track you manufacture and sales processes.
 * SQL
 # Launch
 Application is available under this url:
-
+https://bakery-manager.herokuapp.com/
 # Git presentation
 
