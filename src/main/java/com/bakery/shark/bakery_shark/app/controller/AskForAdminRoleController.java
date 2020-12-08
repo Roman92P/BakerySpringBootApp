@@ -34,7 +34,7 @@ public class AskForAdminRoleController {
     public String askForAdminRole(@AuthenticationPrincipal CurrentUser currentUser){
 
         String message = String.format("Dear Admin! \n User: %s \n Id: %d\n is asking for admin rights.\n If you accept - click link bellow.\n" +
-                        "http://localhost:8080/admin/addAdminRights/%d" +
+                        "https://bakery-manager.herokuapp.com/admin/addAdminRights/%d" +
                         "\nBest Regards,\n Development Team",
                 currentUser.getUsername(),
                 currentUser.getUser().getId(),

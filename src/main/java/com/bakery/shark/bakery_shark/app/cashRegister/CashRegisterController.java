@@ -187,7 +187,7 @@ public class CashRegisterController {
 
         status.setComplete();
 
-        logger.error("bill id after set bill to bileItems " + bill.getId());
+//        logger.error("bill id after set bill to bileItems " + bill.getId());
 
         jpaBillService.createTextBill(bill.getId(), userService.findByUserName(principal.getName()).getId());
 

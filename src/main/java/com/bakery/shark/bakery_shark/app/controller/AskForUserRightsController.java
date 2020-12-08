@@ -29,7 +29,7 @@ public class AskForUserRightsController {
     @RequestMapping("/user/askForUserRights")
     public String askForUserRights(@AuthenticationPrincipal CurrentUser currentUser){
         String message = String.format("Dear Admin! \n User: %s \n Id: %d\n is asking for user rights.\n If you accept - click link bellow.\n" +
-                        "http://localhost:8080/admin/addUserRights/%d" +
+                        "https://bakery-manager.herokuapp.com/admin/addUserRights/%d" +
                         "\nBest Regards,\n Development Team",
                 currentUser.getUsername(),
                 currentUser.getUser().getId(),
