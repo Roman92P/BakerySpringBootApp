@@ -55,7 +55,8 @@ public class JpaBillService implements BillService {
     public void createTextBill(Long id, Long userId) {
         Bill billById = billRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         List<BillItem> allByBill_id = billItemRepository.findAllByBill_Id(id);
-        double sum = allByBill_id.stream().mapToDouble(billItem -> billItem.getProduct().getPrice() * billItem.getSoldProductQuantity()).sum();
+//        double sum = allByBill_id.stream().mapToDouble(billItem -> billItem.getProduct().getPrice() * billItem.getSoldProductQuantity()).sum();
+        double sum = allByBill_id.stream().mapToDouble(billItem -> billItem.getSoldProductPrice()* billItem.getSoldProductQuantity()).sum();
         double roundedSum = BigDecimal.valueOf(sum).setScale(2, RoundingMode.HALF_UP).doubleValue();
         billById.setRealSumOfOrder(roundedSum);
         billById.setUser(userService.findByUserId(userId).orElseThrow(EntityNotFoundException::new));

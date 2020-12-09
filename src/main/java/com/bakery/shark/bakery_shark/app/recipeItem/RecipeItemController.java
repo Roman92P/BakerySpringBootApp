@@ -61,6 +61,7 @@ public class RecipeItemController {
         }
         model.addAttribute("recipeId", id);
         Recipe certainRecipe = recipeService.getRecipe(id).orElseThrow(EntityNotFoundException::new);
+
         model.addAttribute("recipeItem", recipeItem);
         List<RecipeItem> recipeItemsByRecipeId = recipeItemService.getAllRecipeItemsByid(id);
         model.addAttribute("recipeItemsByRecipeId", recipeItemsByRecipeId);

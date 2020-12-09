@@ -24,7 +24,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-xs-12">
-                        <label class="h2">Add ingredient and quantities to Recipe with id: <span id="recipeIdVal" th:text="${recipeId}"></span></label>
+                        <label class="h2">Add ingredient and quantities to Recipe with id: <span id="recipeIdVal"
+                                                                                                 th:text="${recipeId}"></span></label>
                         <form method="post" action="#" th:object="${recipeItem}" th:action="@{/recipeItem/add}">
                             <label th:for="${recipeItem.recipe}">
                                 <input hidden th:field="*{recipe.id}"/>
@@ -33,7 +34,8 @@
                                 <div class="col-lg-6 col-md-6 col-xs-12">
                                     <label th:for="${recipeItem.ingredients}">Add ingredient to recipe item
                                         <select th:field="*{ingredients}">
-                                            <option th:each="i : ${ingredients}" th:value="${i.id}" th:label="${i.name}">
+                                            <option th:each="i : ${ingredients}" th:value="${i.id}"
+                                                    th:label="${i.name}">
                                         </select>
                                     </label>
                                 </div>
@@ -41,13 +43,14 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-xs-12">
                                     <label th:for="${recipeItem.ingredientQuantity}">Set quantity
-                                        <input th:value="*{ingredientQuantity}" type="number" th:step="0.001" th:field="*{ingredientQuantity}"/>
+                                        <input th:value="*{ingredientQuantity}" type="number" th:step="0.001"
+                                               th:field="*{ingredientQuantity}"/>
                                     </label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <input type="submit" class="btn btn-primary shadow-lg" th:value="Add">
+                                    <input type="submit" class="btn btn-primary shadow-sm" th:value="Add">
                                 </div>
                             </div>
                         </form>
@@ -55,30 +58,37 @@
                 </div>
                 <div class="container-fluid">
                     <div class="row">
-                        <div class = "col">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>Ingredient quantity</th>
-                                    <th>Ingredient name</th>
-                                    <th>Recipe name</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="recipeItem : ${recipeItemsByRecipeId}">
-                                    <td th:text="${recipeItem.id}"></td>
-                                    <td th:text="${recipeItem.ingredientQuantity}"></td>
-                                    <td th:text="${recipeItem.ingredients.name}"></td>
-                                    <td th:text="${recipeItem.recipe.getName()}"></td>
-                                    <td>
-                                        <p><a th:href="@{/recipeItem/edit/{id}(id=${recipeItem.id})}">Edit</a></p>
-                                        <p><a th:href="@{/recipeItem/delete/{id1}/{id2}(id1=${recipeItem.ingredients.id}, id2=${recipeItem.recipe.id})}">Delete</a></p>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>id</th>
+                                            <th>Ingredient quantity</th>
+                                            <th>Ingredient name</th>
+                                            <th>Recipe name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="recipeItem : ${recipeItemsByRecipeId}">
+                                            <td th:text="${recipeItem.id}"></td>
+                                            <td th:text="${recipeItem.ingredientQuantity}"></td>
+                                            <td th:text="${recipeItem.ingredients.name}"></td>
+                                            <td th:text="${recipeItem.recipe.name}"></td>
+                                            <td>
+                                                <p><a class="btn btn-dark" role="button" th:href="@{/recipeItem/edit/{id}(id=${recipeItem.id})}">Edit</a>
+                                                </p>
+                                                <p>
+                                                    <a class="btn btn-dark" role="button" th:href="@{/recipeItem/delete/{id1}/{id2}(id1=${recipeItem.ingredients.id}, id2=${recipeItem.recipe.id})}">Delete</a>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -86,50 +96,51 @@
                             <a href="/main" role="button" class="btn btn-primary shadow-lg">Back to main</a>
                         </div>
                     </div>
-            </div>
-            <!--        End of content-->
-            <!--        th footer-->
-            <div th:insert="fragments/footer::#footer"></div>
-        </div>
-    </div>
-</div>
-<!-- End of Page Wrapper -->
+                </div>
+                <!--        End of content-->
+                <!--        th footer-->
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-<!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
-                <form th:action="@{/logout}" method="post">
-                    <input class="btn btn-primary" type="submit" value="Wyloguj">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                </form>
             </div>
         </div>
+        <div th:insert="fragments/footer::#footer"></div>
     </div>
-</div>
-<!-- Bootstrap core JavaScript-->
-<script src="/static/vendor/jquery/jquery.min.js"></script>
-<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- Core plugin JavaScript-->
-<script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
-<!-- Custom scripts for all pages-->
-<script src="/static/js/sb-admin-2.min.js"></script>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                    <form th:action="@{/logout}" method="post">
+                        <input class="btn btn-primary" type="submit" value="Wyloguj">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="/static/js/sb-admin-2.min.js"></script>
 </div>
 </body>
 </html>

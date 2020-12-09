@@ -3,6 +3,8 @@ package com.bakery.shark.bakery_shark.app.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,6 +24,7 @@ public class LostProducts {
     @Column(name = "created_on")
     private LocalDateTime createdOn;
 
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_id")
     private Stock lostStock;

@@ -39,9 +39,9 @@
                                         <h5>Ingredients with 0 quantity: </h5>
                                     </div>
                                 </div>
-                                <ul class="list-group" th:each="i : ${zeroQuantityIngredients}">
+                                <ul class="list-group mt-1 mb-1 text-danger" th:each="i : ${zeroQuantityIngredients}">
                                     <li class="list-group-item">
-                                        <span th:text="${i.name}"></span>
+                                        <span class="mb-1" th:text="${i.name}"></span>
                                         <a class="btn btn-primary" role="button"
                                            th:href="@{/ingredient/edit/{id}(id=${i.id})}">Refill</a>
                                     </li>
@@ -51,9 +51,9 @@
                                         <h5>Ingredients with minimum quantity: </h5>
                                     </div>
                                 </div>
-                                <ul class="list-group" th:each="i : ${almostEmptyIngredients}">
+                                <ul class="list-group mt-1 mb-1 text-info" th:each="i : ${almostEmptyIngredients}">
                                     <li class="list-group-item">
-                                        <span th:text="${i.name}"></span>
+                                        <span class="mb-1" th:text="${i.name}"></span>
                                         <a class="btn btn-primary" role="button"
                                            th:href="@{/ingredient/edit/{id}(id=${i.id})}">Refill</a>
                                     </li>

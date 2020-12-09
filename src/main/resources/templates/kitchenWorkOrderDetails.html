@@ -40,30 +40,35 @@
             <!--        Content-->
             <div class="container-fluid">
                 <div style="overflow:auto">
-                    <table class="table table-hover">
-                        <thead>
-                        <td>Work order ID</td>
-                        <td>Product</td>
-                        <td>Quantity</td>
-                        </thead>
-                        <tbody>
-                        <tr th:each="product : ${workOrder}">
-                            <td th:text="${product.manufactured.id}"></td>
-                            <td th:text="${product.product.name}"></td>
-                            <td th:text="${product.quantity}"></td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td>
-<!--                                <button type="button" class="btn btn-primary btn-lg" th:href="@{/kitchen}">Back to-->
-<!--                                    kitchen-->
-<!--                                </button>-->
-                                <a th:href="@{/kitchen}" class="btn btn-primary btn-lg" role="button">Back to kitchen</a>
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <table class="table table-hover">
+                                <thead>
+                                <td>Work order ID</td>
+                                <td>Product</td>
+                                <td>Quantity</td>
+                                </thead>
+                                <tbody>
+                                <tr th:each="product : ${workOrder}">
+                                    <td th:text="${product.manufactured.id}"></td>
+                                    <td th:text="${product.product.name}"></td>
+                                    <td th:text="${product.quantity}"></td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td>
+                                        <!--                                <button type="button" class="btn btn-primary btn-lg" th:href="@{/kitchen}">Back to-->
+                                        <!--                                    kitchen-->
+                                        <!--                                </button>-->
+                                        <a th:href="@{/kitchen}" class="btn btn-primary btn-lg" role="button">Back to
+                                            kitchen</a>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--        End of content-->
@@ -92,7 +97,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-<!--                    <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                    <!--                    <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
                     <form th:action="@{/logout}" method="post">
                         <input class="fa fa-id-badge" type="submit" value="Wyloguj">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

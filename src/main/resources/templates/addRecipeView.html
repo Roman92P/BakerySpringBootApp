@@ -25,22 +25,24 @@
                 <div class="row">
                     <div class="col-12">
                         <form action="#" th:action="@{/recipe/add}" th:object="${recipe}" method="post">
-                            <input type="hidden" th:value="${recipe.id}" th:field="*{id}">
                             <div th:if="${recipe.id != 0}">
+                                <input type="hidden" th:value="${recipe.id}" th:field="*{id}">
                                 <h2 class="alert-warning"><span th:text="|Edit ${recipe.name}|"></span></h2>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-xs-12">
                                     <label th:for="${recipe.name}">Name of Recipe</label>
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-xs-12">
-                                    <input th:field="*{name}" type="text" class="container-fluid" th:class="${#fields.hasErrors('name')}? fieldError"/>
-                                    <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect date</p>
-                                </div>
                             </div>
                             <div class="row">
-                                <div class="col-12">
-                                    <input type="submit" class="btn-light" value="Add">
+                                <div class="col-lg-2 col-md-2 col-xs-12">
+                                    <input th:field="*{name}" type="text" class="container-fluid"
+                                           th:class="${#fields.hasErrors('name')}? fieldError"/>
+                                    <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                                        Incorrect date</p>
+                                </div>
+                                <div class="col-lg-10 col-md-10 col-xs-12">
+                                    <input type="submit" class="btn btn-primary shadow-sm" value="Add"/>
                                 </div>
                             </div>
                         </form>
@@ -50,31 +52,38 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>Name</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="recipe : ${allRecipes}">
-                                    <td th:text="${{recipe.id}}"></td>
-                                    <td th:text="${{recipe.name}}"></td>
-                                    <td>
-                                        <a th:href="@{/recipe/delete/{id}(id=${recipe.id})}" style="padding-right: 10px">Delete</a>
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>id</th>
+                                            <th>Name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="recipe : ${allRecipes}">
+                                            <td th:text="${{recipe.id}}"></td>
+                                            <td th:text="${{recipe.name}}"></td>
+                                            <td>
+                                                <a class="btn btn-outline-danger" th:href="@{/recipe/delete/{id}(id=${recipe.id})}"
+                                                   style="padding-right: 10px">Delete</a>
 
-                                        <a th:href="@{/recipe/edit/{id}(id=${recipe.id})}" style="padding-right: 10px">Edit</a>
+                                                <a class="btn btn-outline-secondary" th:href="@{/recipe/edit/{id}(id=${recipe.id})}"
+                                                   style="padding-right: 10px">Edit</a>
 
-                                        <a th:href="@{/recipeItem/add/{id}(id=${recipe.id})}" style="padding-right: 10px">Add ingredients</a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                                <a class="btn btn-outline-primary" th:href="@{/recipeItem/add/{id}(id=${recipe.id})}"
+                                                   style="padding-right: 10px">Add ingredients</a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-2 mt-2">
                         <div class="col-12">
                             <a href="/main" role="button" class="btn btn-primary shadow-lg">Back to main</a>
                         </div>
@@ -83,8 +92,9 @@
             </div>
             <!--        End of content-->
             <!--        th footer-->
-            <div th:insert="fragments/footer::#footer"></div>
+
         </div>
+        <div th:insert="fragments/footer::#footer"></div>
     </div>
 </div>
 <!-- End of Page Wrapper -->
@@ -108,7 +118,7 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-<!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                <!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
                 <form th:action="@{/logout}" method="post">
                     <input class="btn btn-primary" type="submit" value="Wyloguj">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

@@ -57,7 +57,8 @@ public class CashRegisterController {
     @RequestMapping("/deleteWorkItem/{id}")
     public String deleteWorkItem(@PathVariable long id) {
         BillItem billItem = jpaBillItemService.getBillItem(id).orElseThrow(EntityNotFoundException::new);
-        String name = billItem.getProduct().getName();
+//        String name = billItem.getProduct().getName();
+        String name = billItem.getSoldProductName();
         List<WorkStockQuantity> allWorkStock = jpaWorkStockProductQuantityService.getAllWorkStock();
         for(WorkStockQuantity w: allWorkStock){
             if(name.equals(w.getWorkStockProductName())){
@@ -89,7 +90,7 @@ public class CashRegisterController {
     public String showCashRegister(Model model, HttpServletRequest request, HttpSession session,SessionStatus status) {
         List<BillItem> allItemsWithNullBill = jpaBillItemService.getAllItemsWithNullBill();
         if(allItemsWithNullBill.size()==0){
-            logger.error("Session status in 1 view: "+ status.isComplete());
+//            logger.error("Session status in 1 view: "+ status.isComplete());
             status.setComplete();
         }
         model.addAttribute("allItemsWithNullBill", allItemsWithNullBill);
@@ -138,7 +139,7 @@ public class CashRegisterController {
 
         String soldProductName = billItem.getSoldProductName();
         int soldProductQuantity = billItem.getSoldProductQuantity();
-        Product product = jpaProductService.getProductByProductName(soldProductName).orElseThrow(EntityNotFoundException::new);
+//        Product product = jpaProductService.getProductByProductName(soldProductName).orElseThrow(EntityNotFoundException::new);
 
 
         Stock stockProductByProductName = jpaStockService.getStockProductByProductName(billItem.getSoldProductName());
@@ -157,7 +158,7 @@ public class CashRegisterController {
                 jpaWorkStockProductQuantityService.updateWorkStockQuantity(workStockQuantityByProductName);
             }
         }
-        billItem.setProduct(product);
+//        billItem.setProduct(product);
         jpaBillItemService.addBillItem(billItem);
         return "redirect:/cashRegister";
     }

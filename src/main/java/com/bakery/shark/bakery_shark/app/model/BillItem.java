@@ -31,9 +31,10 @@ public class BillItem {
     @JoinColumn(name = "bill_id")
     private Bill bill;
 
-    @OneToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+
+//    @OneToOne
+//    @JoinColumn(name = "product_id")
+//    private Product product;
 
     public BillItem() {
     }

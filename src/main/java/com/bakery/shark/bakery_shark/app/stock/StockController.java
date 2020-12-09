@@ -38,7 +38,8 @@ public class StockController {
     public String removeStockItem(@PathVariable long id) {
         Stock stock = jpaStockService.getStockProduct(id).orElseThrow(EntityNotFoundException::new);
         lostProductService.addStockToLost(stock,stock.getProductQuantity());
-        jpaStockService.deleteStock(stock);
+        stock.setProductQuantity(0);
+        jpaStockService.updateStock(stock);
         return "redirect:/stock";
     }
 

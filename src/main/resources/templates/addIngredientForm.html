@@ -41,13 +41,6 @@
                                 <option value="wieght" id="w">Weight</option>
                             </select>
                     </div>
-                    <div class="col">
-                        <div class="row">
-                            <div class="col-auto">
-                                <a th:href="@{/main}" role="button" class="btn btn-md btn-dark shadow-sm">Back to main</a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="row">
@@ -175,13 +168,19 @@
                                 </div>
                             </form>
                         </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col-auto">
+                                <a th:href="@{/main}" role="button" class="btn btn-md btn-dark shadow-sm">Back to main</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <!--        End of content-->
                 <!--        th footer-->
-                <div th:insert="fragments/footer::#footer"></div>
+
             </div>
+        <div th:insert="fragments/footer::#footer"></div>
         </div>
     </div>
     <!-- End of Page Wrapper -->

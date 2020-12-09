@@ -110,9 +110,9 @@ public class KitchenController {
             }
         }
 
-        for(Double d: badgesList){
-            logger.error(d.toString());
-        }
+//        for(Double d: badgesList){
+//            logger.error(d.toString());
+//        }
 
         //show message if choosen quantity in calculator is to much
         HttpSession session1 = request.getSession();
@@ -159,7 +159,7 @@ public class KitchenController {
 
     @RequestMapping("/createManufactured/{id}")
     public String createManufacturedProduct(@PathVariable long id, Model model) {
-        logger.error("Product id witch was choosen in kitchen view: " + id);
+//        logger.error("Product id witch was choosen in kitchen view: " + id);
         ManufactureItem manufactureItem = new ManufactureItem();
         manufactureItem.setProduct(jpaProductService.getProduct(id).orElseThrow(EntityNotFoundException::new));
         model.addAttribute("productId", id);
@@ -233,7 +233,7 @@ public class KitchenController {
     @RequestMapping("/finalizeOrder")
     public String finalizeWorkOrder(HttpServletRequest request, Model model, HttpSession session) {
         Long manufactured1 = (Long) session.getAttribute("manufactured");
-        logger.error("Manufactured w finalize: "+ manufactured1);
+//        logger.error("Manufactured w finalize: "+ manufactured1);
 
         Set<ManufactureItem> allByNullManufactureId = jpaManufactureItemService.getAllItemsWithNullManufatured();
         for ( ManufactureItem manufactureItem : allByNullManufactureId ) {
@@ -308,9 +308,9 @@ public class KitchenController {
             return "redirect:/kitchen";
         }
         int previousItemQuantity = cquantity;
-        logger.error("previous quantity: " + previousItemQuantity);
+//        logger.error("previous quantity: " + previousItemQuantity);
         int newQuantity = manufactureItem.getQuantity();
-        logger.error("new quantity: " + newQuantity);
+//        logger.error("new quantity: " + newQuantity);
         Set<RecipeItem> recipeItemList = manufactureItem.getProduct().getRecipe().getRecipeItemList();
         for ( RecipeItem recipeItem : recipeItemList ) {
             String ingredientName = recipeItem.getIngredients().getName();
