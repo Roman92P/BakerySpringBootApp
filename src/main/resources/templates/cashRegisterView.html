@@ -19,7 +19,7 @@
 
 <div id="wrapper">
     <!--    th sidebar-->
-<!--    <div th:replace="fragments/sidebar::sidebar"></div>-->
+    <!--    <div th:replace="fragments/sidebar::sidebar"></div>-->
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
@@ -64,10 +64,11 @@
                     <div class="col-8">
                         <div th:each="product : ${stockToSold}" style="display: inline-block">
                             <div class="col">
-                                <div class="card" style="width: 10rem;">
+                                <div class="card shadow-sm" style="width: 10rem;">
                                     <div class="card-body">
                                         <a th:href="@{/cashRegister/createSoldItem/{id}/{name}(id=${product.id}, name=${product.productName})}">
-                                            <button class="btn-primary"><span class="badge badge-light"><span th:text="${product.productQuantity}"></span></span>
+                                            <button class="btn-primary"><span class="badge badge-light"><span
+                                                    th:text="${product.productQuantity}"></span></span>
                                                 <i class="fas fa-bread-slice"></i>
                                                 <h5 class="card-title"><p th:text="${product.productName}"></p></h5>
                                             </button>
@@ -78,38 +79,45 @@
                         </div>
                     </div>
                     <div class="col-4">
-                        <table class="table flex-column">
-                            <thead>
-                            <tr>
-                                <th>Product name</th>
-                                <th>Product price</th>
-                                <th>Product quantity</th>
-                                <th>Action</th>
-                            </tr>
-                            <thead>
-                            <tbody>
-                            <tr th:each="item: ${allItemsWithNullBill}" th:id="workOrderItem">
-                                <td th:text="${item.soldProductName}"></td>
-                                <td th:text="${item.soldProductPrice}"></td>
-                                <td th:text="${item.soldProductQuantity}"></td>
-                                <td>
-                                    <a class="btn btn-dark" role="button" th:href="@{/cashRegister/deleteWorkItem/{id}(id=${item.id})}">Remove</a>
-                                </td>
-                            </tr>
-                            </tbody>
-                            <tfoot th:id="endOrder">
-                            <tr >
-                                <td th:colspan="3">
-                                    <div class="row">
-                                    <a th:href="@{/cashRegister/finishOrder}" class="btn-lg btn-primary" style="text-decoration: none" >Complete bill</a>
-                                    </div>
-                                    <div class="row">
-                                        <a th:href="@{/cashRegister/resetOrder}" class="btn-lg btn-danger mt-1" style="text-decoration: none" >Reset bill</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tfoot>
-                        </table>
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table flex-column">
+                                    <thead>
+                                    <tr>
+                                        <th>Product name</th>
+                                        <th>Product price</th>
+                                        <th>Product quantity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <thead>
+                                    <tbody>
+                                    <tr th:each="item: ${allItemsWithNullBill}" th:id="workOrderItem">
+                                        <td th:text="${item.soldProductName}"></td>
+                                        <td th:text="${item.soldProductPrice}"></td>
+                                        <td th:text="${item.soldProductQuantity}"></td>
+                                        <td>
+                                            <a class="btn btn-dark" role="button"
+                                               th:href="@{/cashRegister/deleteWorkItem/{id}(id=${item.id})}">Remove</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot th:id="endOrder">
+                                    <tr>
+                                        <td th:colspan="3">
+                                            <div class="row">
+                                                <a th:href="@{/cashRegister/finishOrder}" class="btn-lg btn-primary"
+                                                   style="text-decoration: none">Complete bill</a>
+                                            </div>
+                                            <div class="row">
+                                                <a th:href="@{/cashRegister/resetOrder}" class="btn-lg btn-danger mt-1"
+                                                   style="text-decoration: none">Reset bill</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -142,7 +150,7 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-<!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
+                <!--                <a class="btn btn-primary" th:href="@{/login}">Logout</a>-->
                 <form th:action="@{/logout}" method="post">
                     <input class="btn btn-primary" type="submit" value="Wyloguj">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
