@@ -27,15 +27,15 @@ public class Ingredient {
     private String name;
 
     @NotNull
-    @Column(name = "weight", precision = 2)
+    @Column(name = "weight", precision = 6,scale = 3)
     private Double weight;
 
     @NotNull
-    @Column(name="quantity", precision = 2)
+    @Column(name="quantity", precision = 6, scale = 3)
     private Double quantity;
 
     @NotNull
-    @Column(name = "liters", precision = 2)
+    @Column(name = "liters", precision = 6, scale = 3)
     private Double litr;
 
     public Ingredient() {

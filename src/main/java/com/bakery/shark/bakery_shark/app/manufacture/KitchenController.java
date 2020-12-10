@@ -68,6 +68,7 @@ public class KitchenController {
         List<Product> productAbleToManufacture = new LinkedList<>();
         List<Double> possibleNumberToProduce = null;
         List<Double>badgesList = new LinkedList<>();
+        List<Integer>badgesIntList = new LinkedList<>();
         for ( Product p : allProducts ) {
             boolean checkIfAbleToAddProduct = true;
             Set<RecipeItem> recipeItemList = p.getRecipe().getRecipeItemList();
@@ -84,6 +85,7 @@ public class KitchenController {
                 if (ingredientQuantity > workIngredientByIngredientName.getWorkIngredientQuantity()) {
                     checkIfAbleToAddProduct = false;
                 }
+
                 double v = workIngredientQuantity / ingredientQuantity;
                 possibleNumberToProduce.add(v);
             }
@@ -103,7 +105,9 @@ public class KitchenController {
                 if (any.isPresent()) {
 //                model.addAttribute("kitchenBadges", any.getAsDouble());
                     double asDouble = any.getAsDouble();
+                    int badgesInt = (int) asDouble;
                     badgesList.add(asDouble);
+                    badgesIntList.add(badgesInt);
                 }
             }catch (NullPointerException e){
                 model.addAttribute("nullMessage", "There is nothing to show");
@@ -133,6 +137,7 @@ public class KitchenController {
         }
         model.addAttribute("products", productAbleToManufacture);
         model.addAttribute("bagdes", badgesList);
+        model.addAttribute("badgesInt", badgesIntList);
         return "kitchenView";
     }
 
@@ -247,12 +252,15 @@ public class KitchenController {
                 if (ingredient.getLitr() != 0) {
                     double v = BigDecimal.valueOf(manufactureItemIngredientQuantity * quantity).setScale(3, RoundingMode.HALF_UP).doubleValue();
                     ingredient.setLitr(ingredient.getLitr() - (v));
+                    logger.error("Ingredient liters: "+ (ingredient.getLitr() - (v)) );
                 } else if (ingredient.getWeight() != 0) {
                     double v = BigDecimal.valueOf(manufactureItemIngredientQuantity * quantity).setScale(3, RoundingMode.HALF_UP).doubleValue();
                     ingredient.setWeight(ingredient.getWeight() - (v));
+                    logger.error("Ingredient weight: "+ (ingredient.getWeight() - (v)) );
                 } else {
                     double v = BigDecimal.valueOf(manufactureItemIngredientQuantity * quantity).setScale(3, RoundingMode.HALF_UP).doubleValue();
                     ingredient.setQuantity(ingredient.getQuantity() - (v));
+                    logger.error("Ingredient quantity: "+ (ingredient.getQuantity() - (v)) );
                 }
                 jpaIngredientService.updateIngredient(ingredient);
             }

@@ -26,6 +26,7 @@ import java.math.RoundingMode;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -60,9 +61,9 @@ public class CashRegisterController {
 //        String name = billItem.getProduct().getName();
         String name = billItem.getSoldProductName();
         List<WorkStockQuantity> allWorkStock = jpaWorkStockProductQuantityService.getAllWorkStock();
-        for(WorkStockQuantity w: allWorkStock){
-            if(name.equals(w.getWorkStockProductName())){
-                w.setWorkStockProductQuantity(w.getWorkStockProductQuantity()+billItem.getSoldProductQuantity());
+        for ( WorkStockQuantity w : allWorkStock ) {
+            if (name.equals(w.getWorkStockProductName())) {
+                w.setWorkStockProductQuantity(w.getWorkStockProductQuantity() + billItem.getSoldProductQuantity());
                 jpaWorkStockProductQuantityService.updateWorkStockQuantity(w);
             }
         }
@@ -87,9 +88,9 @@ public class CashRegisterController {
 
     // First Cashregister View
     @RequestMapping
-    public String showCashRegister(Model model, HttpServletRequest request, HttpSession session,SessionStatus status) {
+    public String showCashRegister(Model model, HttpServletRequest request, HttpSession session, SessionStatus status) {
         List<BillItem> allItemsWithNullBill = jpaBillItemService.getAllItemsWithNullBill();
-        if(allItemsWithNullBill.size()==0){
+        if (allItemsWithNullBill.size() == 0) {
 //            logger.error("Session status in 1 view: "+ status.isComplete());
             status.setComplete();
         }
@@ -100,12 +101,7 @@ public class CashRegisterController {
     @ModelAttribute("stockToSold")
     public List<Stock> allStockProducts() {
         List<Stock> allStock = jpaStockService.getAllStock();
-        for ( Stock s : allStock ) {
-            if (s.getProductQuantity() == 0) {
-                jpaStockService.deleteStock(s);
-            }
-        }
-        return jpaStockService.getAllStock();
+        return allStock.stream().filter(stock -> stock.getProductQuantity() != 0).collect(Collectors.toList());
     }
 
     //Add product quantity
@@ -125,7 +121,7 @@ public class CashRegisterController {
             return "addQuantityCashView";
         }
 
-        if(model.getAttribute("orderSession")==null){
+        if (model.getAttribute("orderSession") == null) {
             jpaWorkStockProductQuantityService.getAllWorkStock().stream().forEach(jpaWorkStockProductQuantityService::deleteWorkStockProductQuantity);
             List<Stock> allStock = jpaStockService.getAllStock();
             for ( Stock s : allStock ) {
@@ -133,7 +129,7 @@ public class CashRegisterController {
                 workStockQuantity.setWorkStockProductName(s.getProductName());
                 workStockQuantity.setWorkStockProductQuantity(s.getProductQuantity());
                 jpaWorkStockProductQuantityService.addWorkStockQuantity(workStockQuantity);
-                model.addAttribute("orderSession","yes");
+                model.addAttribute("orderSession", "yes");
             }
         }
 
