@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean activateUser(String code) {
-        User user =  userRepository.findByActivationCode(code);
+        User user =  userRepository.findByActivationCodeEquals(code);
         if(user==null){
             return false;
         }
