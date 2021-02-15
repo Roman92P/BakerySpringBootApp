@@ -26,8 +26,8 @@ public class MailConfig {
     @Value("${spring.mail.username}")
     private String username;
 
-//    @Value("${spring.mail.password}")
-//    private String password;
+    @Value("${spring.mail.password}")
+    private String password;
 
     private String getSecretPassword() {
         String secretPassword;
@@ -46,7 +46,7 @@ public class MailConfig {
     }
 
 
-    @Value("587")
+    @Value("${spring.mail.port}")
     private int port;
 
     @Value("${spring.mail.protocol}")
@@ -60,7 +60,7 @@ public class MailConfig {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(host);
         javaMailSender.setUsername(username);
-        javaMailSender.setPassword(secretPassword);
+        javaMailSender.setPassword(password);
         javaMailSender.setPort(port);
 
         Properties javaMailProperties = javaMailSender.getJavaMailProperties();
